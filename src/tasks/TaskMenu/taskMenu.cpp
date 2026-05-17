@@ -51,10 +51,11 @@ void taskMenu(void *params){
             if(currentMenuOption!= lastMenuOption){
                 digitalWrite(menuOptionToLed[currentMenuOption], HIGH);
                 digitalWrite(menuOptionToLed[lastMenuOption], LOW);
+                tone(BUZZER,ledToBuzzer[currentMenuOption]);
+                vTaskDelay(pdMS_TO_TICKS(100));
+                noTone(BUZZER);
             }
         }
-
-        Serial.println(currentMenuOption);
-        vTaskDelay(pdMS_TO_TICKS(20));
+        
     }
 }

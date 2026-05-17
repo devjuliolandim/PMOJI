@@ -42,7 +42,7 @@ void taskInput(void *params){
         event = ButtonEvent::BTN_NONE;
         
         for(int i = 0; i < 5; i++){
-            if(digitalRead(buttonToEvent[i])== LOW){
+            if(digitalRead(eventToPin[i])== LOW){
                 event = (ButtonEvent)i;
                 break;
             }
