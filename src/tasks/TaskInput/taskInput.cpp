@@ -1,0 +1,59 @@
+#include<Arduino.h>
+
+#include "config.h"
+#include "states.h"
+#include "queues.h"
+#include "taskInput.h"
+
+
+//DEBUG PURPOSE ONLY
+void printButton(ButtonEvent btn){
+    switch(btn){
+        case BTN_RED:
+            Serial.println("Botão Vermelho Apertado!");
+        break;
+
+        case BTN_YELLOW:
+            Serial.println("Botão Amarelo Apertado!");
+        break;
+
+        case BTN_BLUE:
+            Serial.println("Botão Azul Apertado!");
+        break;
+        
+        case BTN_GREEN:
+            Serial.println("Botão Verde Apertado!");
+        break;
+    }
+}
+
+void taskInput(void *params){
+    ButtonEvent event;
+
+    pinMode(RED_BUTTON, INPUT_PULLUP);
+    pinMode(BLUE_BUTTON, INPUT_PULLUP);
+    pinMode(YELLOW_BUTTON, INPUT_PULLUP);
+    pinMode(GREEN_BUTTON, INPUT_PULLUP);
+    pinMode(WHITE_BUTTON, INPUT_PULLUP);
+
+    
+    
+    while(true){
+        event = ButtonEvent::BTN_NONE;
+        
+        for(int* button : arrButton){
+            if(digitalRead(button[0]) == LOW){
+                event = (ButtonEvent)button[1];
+                printButton((ButtonEvent)button[1]);
+            }
+        }
+
+        if(event != BTN_NONE){
+            xQueueSend(inputQueue,&event, portMAX_DELAY);
+
+            vTaskDelay(pdMS_TO_TICKS(200));
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(20));
+    }
+}
