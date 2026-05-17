@@ -3,6 +3,7 @@
 #include "config.h"
 #include "states.h"
 #include "queues.h"
+#include "globals.h"
 #include "taskInput.h"
 
 
@@ -30,21 +31,20 @@ void printButton(ButtonEvent btn){
 void taskInput(void *params){
     ButtonEvent event;
 
-    pinMode(RED_BUTTON, INPUT_PULLUP);
-    pinMode(BLUE_BUTTON, INPUT_PULLUP);
-    pinMode(YELLOW_BUTTON, INPUT_PULLUP);
-    pinMode(GREEN_BUTTON, INPUT_PULLUP);
-    pinMode(WHITE_BUTTON, INPUT_PULLUP);
+    pinMode(RED_BUTTON_PIN, INPUT_PULLUP);
+    pinMode(BLUE_BUTTON_PIN, INPUT_PULLUP);
+    pinMode(YELLOW_BUTTON_PIN, INPUT_PULLUP);
+    pinMode(GREEN_BUTTON_PIN, INPUT_PULLUP);
 
     
     
     while(true){
         event = ButtonEvent::BTN_NONE;
         
-        for(int* button : arrButton){
-            if(digitalRead(button[0]) == LOW){
-                event = (ButtonEvent)button[1];
-                printButton((ButtonEvent)button[1]);
+        for(int i = 0; i < 5; i++){
+            if(digitalRead(buttonToEvent[i])== LOW){
+                event = (ButtonEvent)i;
+                break;
             }
         }
 
