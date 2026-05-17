@@ -10,3 +10,10 @@ enum ButtonEvent {
     BTN_NONE // Of course this is the case that none was pressed
 };
 
+enum GameState{
+    MENU,
+    SIMONSAYS,
+    STROOP,
+    REFLEX,
+    LEADERBOARD
+};
