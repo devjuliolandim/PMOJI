@@ -11,8 +11,8 @@
 
 // Buttons
 #define RED_BUTTON_PIN     13
-#define BLUE_BUTTON_PIN    12
-#define YELLOW_BUTTON_PIN  14
+#define BLUE_BUTTON_PIN    14
+#define YELLOW_BUTTON_PIN  12
 #define GREEN_BUTTON_PIN   27
 #define WHITE_BUTTON_PIN  26
 

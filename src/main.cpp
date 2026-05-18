@@ -2,6 +2,7 @@
 #include "config.h"
 #include "queues.h"
 #include "states.h"
+#include "mapping.h"
 #include "taskInput.h"
 #include "taskMenu.h"
 #include "taskHandles.h"
@@ -14,6 +15,9 @@ TaskHandle_t stroopTaskHandle = NULL;
 TaskHandle_t reflexTaskHandle = NULL;
 TaskHandle_t leaderboardTaskHandle = NULL;
 
+TaskHandle_t menuOptionToTask[4];
+
+
 void setup() {
 
     Serial.begin(9600);
@@ -25,7 +29,6 @@ void setup() {
 
     inputQueue = xQueueCreate(10, sizeof(ButtonEvent));
 
-    
 
     xTaskCreatePinnedToCore(
         taskInput,
@@ -36,16 +39,8 @@ void setup() {
         NULL,
         0
     );
-   /* xTaskCreatePinnedToCore(
-        taskMenu,
-        "Task Menu",
-        2048,
-        NULL,
-        1,
-        &menuTaskHandle,
-        0
-    );
-*/
+
+
     xTaskCreatePinnedToCore(
         taskSimonSays,
         "Simon",
@@ -55,6 +50,20 @@ void setup() {
         &simonTaskHandle,
         1
     );
+    
+    xTaskCreatePinnedToCore(
+        taskMenu,
+        "Task Menu",
+        2048,
+        NULL,
+        1,
+        &menuTaskHandle,
+        0
+    );
+
+    menuOptionToTask[0] = simonTaskHandle;
+
+    
 }
 
 void loop() {

@@ -26,7 +26,6 @@ void taskMenu(void *params){
     while(true){
 
 
-
         if(xQueueReceive(inputQueue, &receivedButton, portMAX_DELAY)== pdTRUE){
             lastMenuOption = currentMenuOption;
             switch (receivedButton){
@@ -43,6 +42,8 @@ void taskMenu(void *params){
                 case BTN_BLUE:
                     vTaskResume(menuOptionToTask[currentMenuOption]);
                     vTaskSuspend(menuTaskHandle);
+                    currentMenuOption = SIMONSAYS;
+                    lastMenuOption = LEADERBOARD;
                 break;
 
 

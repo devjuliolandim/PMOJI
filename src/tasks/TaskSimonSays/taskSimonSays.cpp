@@ -102,8 +102,12 @@ void taskSimonSays(void * params){
                   if((int)receivedButton == sequence[i]){
                     blinkAndBuzzer((int)receivedButton, INPUT_DELAY);
                     i++;
-                  }else{
+                  }else if((int) receivedButton == BTN_WHITE){
+                    isMenuActive = true;
+                    break;
+                }else{
                     isGameOver = true;
+                    isBegining = true;
                     break;
                   } 
                 }
@@ -112,8 +116,10 @@ void taskSimonSays(void * params){
             if(isMenuActive){
                 counter = 0;
                 isBegining = true;
+                isGameOver = false;
                 vTaskResume(menuTaskHandle);
                 vTaskSuspend(simonTaskHandle);
+                isMenuActive = false;
             }else if (!isGameOver){
                 counter++;
             }
