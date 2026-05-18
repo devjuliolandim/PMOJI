@@ -1,14 +1,14 @@
 #include <Arduino.h>
 
 #include "taskMenu.h"
+#include "taskHandles.h"
 #include "queues.h"
 #include "states.h"
 #include "config.h"
-#include "globals.h"
+#include "mapping.h"
 
 void taskMenu(void *params){
     ButtonEvent receivedButton;
-    bool isMenuActive = true;
     MenuOption currentMenuOption = SIMONSAYS;
     MenuOption lastMenuOption = LEADERBOARD;
 
@@ -20,17 +20,17 @@ void taskMenu(void *params){
     digitalWrite(menuOptionToLed[currentMenuOption], HIGH);
 
 
+    //Suspend games tasks before choosing one
+    vTaskSuspend(simonTaskHandle);
+    
     while(true){
 
-        if(!isMenuActive){
-            continue;
-        }
 
 
         if(xQueueReceive(inputQueue, &receivedButton, portMAX_DELAY)== pdTRUE){
             lastMenuOption = currentMenuOption;
-
             switch (receivedButton){
+
 
                 case BTN_RED:
                     currentMenuOption = (MenuOption) ((currentMenuOption - 1 + MENU_OPTIONS_SIZE)%MENU_OPTIONS_SIZE);
@@ -41,19 +41,22 @@ void taskMenu(void *params){
                 break;
 
                 case BTN_BLUE:
-                    isMenuActive = false;
+                    vTaskResume(menuOptionToTask[currentMenuOption]);
+                    vTaskSuspend(menuTaskHandle);
                 break;
 
 
                 default:
                 break;
-            }
+            } 
             if(currentMenuOption!= lastMenuOption){
                 digitalWrite(menuOptionToLed[currentMenuOption], HIGH);
                 digitalWrite(menuOptionToLed[lastMenuOption], LOW);
                 tone(BUZZER,ledToBuzzer[currentMenuOption]);
                 vTaskDelay(pdMS_TO_TICKS(100));
                 noTone(BUZZER);
+                Serial.println("Hi");
+
             }
         }
         

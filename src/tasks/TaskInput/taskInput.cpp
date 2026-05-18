@@ -3,7 +3,7 @@
 #include "config.h"
 #include "states.h"
 #include "queues.h"
-#include "globals.h"
+#include "mapping.h"
 #include "taskInput.h"
 
 
@@ -35,7 +35,7 @@ void taskInput(void *params){
     pinMode(BLUE_BUTTON_PIN, INPUT_PULLUP);
     pinMode(YELLOW_BUTTON_PIN, INPUT_PULLUP);
     pinMode(GREEN_BUTTON_PIN, INPUT_PULLUP);
-
+    pinMode(WHITE_BUTTON_PIN, INPUT_PULLUP);
     
     
     while(true){
