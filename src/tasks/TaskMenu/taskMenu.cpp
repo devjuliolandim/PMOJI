@@ -22,6 +22,7 @@ void taskMenu(void *params){
 
     //Suspend games tasks before choosing one
     vTaskSuspend(simonTaskHandle);
+    vTaskSuspend(leaderboardTaskHandle);
     
     while(true){
 

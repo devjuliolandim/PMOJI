@@ -5,6 +5,7 @@
 #include "queues.h"
 #include "mapping.h"
 #include "globals.h"
+#include "storage.h"
 
 void blinkAndBuzzer(int index, int delay){
         digitalWrite(indexToLed[index], HIGH);
@@ -67,6 +68,19 @@ void taskSimonSays(void * params){
             }
 
             if(isGameOver){
+
+                int highScore = getSimonHighScore();
+
+                if(counter > highScore){
+
+                    Serial.print("NOVO HIGHSCORE: ");
+                    Serial.println(counter);
+                    Serial.print("ANTIGO HIGHSCORE: ");
+                    Serial.println(getSimonHighScore());
+                    highScore = counter;
+                    saveSimonHighScore(highScore);
+                }
+
                 counter = 0;
                 isGameOver = false;
                 gameOverRoutine();
@@ -123,9 +137,7 @@ void taskSimonSays(void * params){
             }else if (!isGameOver){
                 counter++;
             }
-
         }
-
     }
 
 }

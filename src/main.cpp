@@ -2,11 +2,13 @@
 #include "config.h"
 #include "queues.h"
 #include "states.h"
+#include "storage.h"
 #include "mapping.h"
 #include "taskInput.h"
 #include "taskMenu.h"
 #include "taskHandles.h"
 #include "taskSimonSays.h"
+#include "taskLeaderBoard.h"
 
 QueueHandle_t inputQueue;
 TaskHandle_t menuTaskHandle = NULL;
@@ -29,7 +31,6 @@ void setup() {
 
     inputQueue = xQueueCreate(10, sizeof(ButtonEvent));
 
-
     xTaskCreatePinnedToCore(
         taskInput,
         "Task Input",
@@ -50,6 +51,15 @@ void setup() {
         &simonTaskHandle,
         1
     );
+    xTaskCreatePinnedToCore(
+        taskLeaderBoard,
+        "LeaderBoard",
+        4096,
+        NULL,
+        1,
+        &leaderboardTaskHandle,
+        1
+    );
     
     xTaskCreatePinnedToCore(
         taskMenu,
@@ -62,7 +72,9 @@ void setup() {
     );
 
     menuOptionToTask[0] = simonTaskHandle;
-
+    menuOptionToTask[1] = stroopTaskHandle;
+    menuOptionToTask[2] = reflexTaskHandle;
+    menuOptionToTask[3] = leaderboardTaskHandle;
     
 }
 
