@@ -4,6 +4,7 @@
 #include "random"
 #include "queues.h"
 #include "mapping.h"
+#include "globals.h"
 
 void blinkAndBuzzer(int index, int delay){
         digitalWrite(indexToLed[index], HIGH);
@@ -74,20 +75,32 @@ void taskSimonSays(void * params){
             sequence[counter] = random(0,4);
 
             int i = 0;
+            inputsEnabled = false;
 
+            vTaskDelay(pdMS_TO_TICKS(250));            
             while(i < counter + 1 && !isMenuActive){
                 blinkAndBuzzer(sequence[i], SEQUENCE_DELAY);
-                vTaskDelay(pdMS_TO_TICKS(100));
+                vTaskDelay(pdMS_TO_TICKS(250));
                 i++;
             }
 
+            
             i = 0;
+
+            xQueueReset(inputQueue);
+            inputsEnabled = true;
 
             while(i < counter + 1 && !isMenuActive){
 
                 if(xQueueReceive(inputQueue, &receivedButton, portMAX_DELAY)== pdTRUE){
+
+                    Serial.print("Led sorteado : ");
+                    Serial.println(sequence[i]);
+                    Serial.print("Botão apertado : ");
+                    Serial.println(receivedButton);
+                    
                   if((int)receivedButton == sequence[i]){
-                    blinkAndBuzzer(receivedButton, INPUT_DELAY);
+                    blinkAndBuzzer((int)receivedButton, INPUT_DELAY);
                     i++;
                   }else{
                     isGameOver = true;

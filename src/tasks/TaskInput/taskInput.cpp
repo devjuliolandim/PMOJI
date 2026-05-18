@@ -4,6 +4,7 @@
 #include "states.h"
 #include "queues.h"
 #include "mapping.h"
+#include "globals.h"
 #include "taskInput.h"
 
 
@@ -49,9 +50,14 @@ void taskInput(void *params){
         }
 
         if(event != BTN_NONE){
-            xQueueSend(inputQueue,&event, portMAX_DELAY);
 
-            vTaskDelay(pdMS_TO_TICKS(200));
+            if(event == BTN_WHITE || inputsEnabled){
+
+                xQueueSend(inputQueue,&event, portMAX_DELAY);
+
+                //Debounce
+                vTaskDelay(pdMS_TO_TICKS(200));
+            }
         }
 
         vTaskDelay(pdMS_TO_TICKS(20));
