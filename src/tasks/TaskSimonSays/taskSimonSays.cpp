@@ -62,11 +62,7 @@ void taskSimonSays(void * params){
 
     while(true){
         while(counter < SEQUENCE_SIZE && !isMenuActive){
-            if(isBegining){
-                isBegining = false;
-                gameBeginRoutine();
-            }
-
+            
             if(isGameOver){
 
                 int highScore = getSimonHighScore();
@@ -86,9 +82,19 @@ void taskSimonSays(void * params){
                 gameOverRoutine();
             }
 
+
+            if(isBegining){
+                isBegining = false;
+                gameBeginRoutine();
+            }
+
             sequence[counter] = random(0,4);
 
             int i = 0;
+
+
+            //Global Variable that blocks the queue from receive inputs
+            //The WHITE BUTTON is the only exception
             inputsEnabled = false;
 
             vTaskDelay(pdMS_TO_TICKS(250));            

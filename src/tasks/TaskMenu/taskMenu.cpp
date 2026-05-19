@@ -23,6 +23,7 @@ void taskMenu(void *params){
     //Suspend games tasks before choosing one
     vTaskSuspend(simonTaskHandle);
     vTaskSuspend(leaderboardTaskHandle);
+    vTaskSuspend(reflexTaskHandle);
     
     while(true){
 
@@ -43,6 +44,10 @@ void taskMenu(void *params){
                 case BTN_BLUE:
                     vTaskResume(menuOptionToTask[currentMenuOption]);
                     vTaskSuspend(menuTaskHandle);
+
+                    //When it returns, the primary state is
+                    // CurrentOption -> SIMONSAYS -> RED LED
+                    // LastOption -> LEADERBOARD
                     currentMenuOption = SIMONSAYS;
                     lastMenuOption = LEADERBOARD;
                 break;
@@ -51,6 +56,8 @@ void taskMenu(void *params){
                 default:
                 break;
             } 
+
+
             if(currentMenuOption!= lastMenuOption){
                 digitalWrite(menuOptionToLed[currentMenuOption], HIGH);
                 digitalWrite(menuOptionToLed[lastMenuOption], LOW);
@@ -58,7 +65,6 @@ void taskMenu(void *params){
                 vTaskDelay(pdMS_TO_TICKS(100));
                 noTone(BUZZER);
                 Serial.println("Hi");
-
             }
         }
         

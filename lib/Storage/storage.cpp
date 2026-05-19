@@ -27,3 +27,25 @@ void saveSimonHighScore(int score){
 
     preferences.end();
 }
+
+int getReflexHighScore(){
+    Preferences preferences;
+    
+    preferences.begin("scores", false);
+    
+    int score = preferences.getInt("reflex",0);
+
+    preferences.end();
+
+    return score;
+}
+
+void saveReflexHighScore(int score){
+    Preferences preferences;
+
+    preferences.begin("scores", false);
+
+    preferences.putInt("reflex", score);
+
+    preferences.end();
+}

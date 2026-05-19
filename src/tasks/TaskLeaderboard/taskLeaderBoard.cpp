@@ -16,6 +16,8 @@ void taskLeaderBoard(void * params){
             Serial.println("RECORDES: ");   
             Serial.print("Simon Says: ");
             Serial.println(getSimonHighScore());
+            Serial.print("Reflex: ");
+            Serial.println(getReflexHighScore());
             shouldPrint = false;
         }
 

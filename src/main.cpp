@@ -9,6 +9,7 @@
 #include "taskHandles.h"
 #include "taskSimonSays.h"
 #include "taskLeaderBoard.h"
+#include "taskReflex.h"
 
 QueueHandle_t inputQueue;
 TaskHandle_t menuTaskHandle = NULL;
@@ -51,6 +52,17 @@ void setup() {
         &simonTaskHandle,
         1
     );
+
+    xTaskCreatePinnedToCore(
+        taskReflex,
+        "Reflex",
+        4096,
+        NULL,
+        1,
+        &reflexTaskHandle,
+        1
+    );
+
     xTaskCreatePinnedToCore(
         taskLeaderBoard,
         "LeaderBoard",
