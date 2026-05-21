@@ -25,7 +25,23 @@ void gameBeginRoutineReflex(){
     }
 }
    
-
+void playSound(bool isCorrect, int randomLed){
+    if(isCorrect){
+        digitalWrite(indexToLed[randomLed], LOW);
+        tone(BUZZER, 1319);
+        vTaskDelay(pdMS_TO_TICKS(100));
+        tone(BUZZER, 1568);
+        vTaskDelay(pdMS_TO_TICKS(100));
+        noTone(BUZZER);
+    }else{
+        digitalWrite(indexToLed[randomLed], LOW);
+        tone(BUZZER, 400);
+        vTaskDelay(pdMS_TO_TICKS(100));
+        tone(BUZZER, 250);
+        vTaskDelay(pdMS_TO_TICKS(100));
+        noTone(BUZZER);
+    }
+}
 
 
 void taskReflex(void * params){
@@ -60,8 +76,7 @@ void taskReflex(void * params){
                     if((int) receivedButton == randomLed){
                         
                         score++;
-                        digitalWrite(indexToLed[randomLed], LOW);
-                        vTaskDelay(pdMS_TO_TICKS(200));
+                        playSound(true,randomLed);
                         playerGuess = true;
                         break;
                     }else if((ButtonEvent) receivedButton == BTN_WHITE){
@@ -72,19 +87,20 @@ void taskReflex(void * params){
                         break;
                     }
                     else{
-                        digitalWrite(indexToLed[randomLed], LOW);
+                        playSound(false,randomLed);
                         break;
                     }
                 }                
             }
 
+            //Just in case of Suspend Task and then come back
             if(shouldRestart){
                 break;
             }
 
+            //User didn't give the input in time
             if(millis() - last > 1000 && !playerGuess){
-                digitalWrite(indexToLed[randomLed],LOW);
-                vTaskDelay(pdMS_TO_TICKS(200));
+                playSound(false,randomLed);
             }
 
             playerGuess = false;
