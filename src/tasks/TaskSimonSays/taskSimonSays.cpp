@@ -65,16 +65,16 @@ void taskSimonSays(void * params){
             
             if(isGameOver){
 
-                int highScore = getSimonHighScore();
+                int highScore = getHighscore("simon");
 
                 if(counter > highScore){
 
                     Serial.print("NOVO HIGHSCORE: ");
                     Serial.println(counter);
                     Serial.print("ANTIGO HIGHSCORE: ");
-                    Serial.println(getSimonHighScore());
+                    Serial.println(getHighscore("simon"));
                     highScore = counter;
-                    saveSimonHighScore(highScore);
+                    saveHighscore("simon",highScore);
                 }
 
                 counter = 0;

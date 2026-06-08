@@ -3,49 +3,24 @@
 
 #include "storage.h"
 
-
-int getSimonHighScore(){
-
+int getHighscore(char* gameName){
     Preferences preferences;
-
-    preferences.begin("scores", true);
-
-    int score = preferences.getInt("simon", 0);
-
+    
+    preferences.begin("scores",true);
+    
+    int score = preferences.getInt(gameName, 0);
+    
     preferences.end();
-
+    
     return score;
 }
 
-void saveSimonHighScore(int score){
-
+void saveHighscore(char *gameName, int score){
     Preferences preferences;
 
     preferences.begin("scores", false);
 
-    preferences.putInt("simon", score);
-
-    preferences.end();
-}
-
-int getReflexHighScore(){
-    Preferences preferences;
-    
-    preferences.begin("scores", false);
-    
-    int score = preferences.getInt("reflex",0);
-
-    preferences.end();
-
-    return score;
-}
-
-void saveReflexHighScore(int score){
-    Preferences preferences;
-
-    preferences.begin("scores", false);
-
-    preferences.putInt("reflex", score);
+    preferences.putInt(gameName, score);
 
     preferences.end();
 }

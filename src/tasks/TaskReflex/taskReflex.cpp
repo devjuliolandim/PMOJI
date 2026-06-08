@@ -111,8 +111,8 @@ void taskReflex(void * params){
             //MUSIC PLAYS WHILE SHOWING THE SCORE
             //ASK IF THE SCORE IS GREATER THAN HIGHSCORE
             
-            if(score > getReflexHighScore()){
-                saveReflexHighScore(score);
+            if(score > getHighscore("reflex")){
+                saveHighscore("reflex",score);
                 Serial.println("PARABÉNS VOCÊ BATEU O NOVO RECORDE!!!!");
                 Serial.print(score);
                 Serial.println(" pts");
