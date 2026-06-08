@@ -18,3 +18,9 @@
 
 // Buzzer
 #define BUZZER         25
+
+// Display
+#define TFT_DC         22  
+#define TFT_CS         32  
+#define TFT_RST        33  
+#define TFT_LED        21  

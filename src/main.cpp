@@ -4,6 +4,7 @@
 #include "states.h"
 #include "storage.h"
 #include "mapping.h"
+#include "taskDisplay.h"
 #include "taskInput.h"
 #include "taskMenu.h"
 #include "taskHandles.h"
@@ -83,6 +84,12 @@ void setup() {
         0
     );
 
+    // Inicializa a tela física
+    inicializarDisplay();
+  
+    // Desenha o menu inicial
+    desenharTelaStatus();
+
     menuOptionToTask[0] = simonTaskHandle;
     menuOptionToTask[1] = stroopTaskHandle;
     menuOptionToTask[2] = reflexTaskHandle;
@@ -91,5 +98,5 @@ void setup() {
 }
 
 void loop() {
-
+    delay(10);
 }
