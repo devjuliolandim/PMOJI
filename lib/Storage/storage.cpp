@@ -11,7 +11,7 @@ int getScore(const char *gameId){
     int score = preferences.getInt(gameId, 0);
 
     preferences.end();
-
+    
     return score;
 }
 
