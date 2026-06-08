@@ -1,9 +1,6 @@
 #pragma once
 
-int getSimonHighScore();
 
-void saveSimonHighScore(int score);
+int getScore(const char *gameId);
 
-int getReflexHighScore();
-
-void saveReflexHighScore(int score);
+void saveScore(const char *gameId, int score);

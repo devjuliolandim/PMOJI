@@ -65,16 +65,16 @@ void taskSimonSays(void * params){
             
             if(isGameOver){
 
-                int highScore = getSimonHighScore();
+                int highScore = getScore("simon");
 
                 if(counter > highScore){
 
                     Serial.print("NOVO HIGHSCORE: ");
                     Serial.println(counter);
                     Serial.print("ANTIGO HIGHSCORE: ");
-                    Serial.println(getSimonHighScore());
+                    Serial.println(getScore("simon"));
                     highScore = counter;
-                    saveSimonHighScore(highScore);
+                    saveScore("simon",highScore);
                 }
 
                 counter = 0;
@@ -97,7 +97,9 @@ void taskSimonSays(void * params){
             //The WHITE BUTTON is the only exception
             inputsEnabled = false;
 
-            vTaskDelay(pdMS_TO_TICKS(250));            
+
+
+            vTaskDelay(pdMS_TO_TICKS(350));            
             while(i < counter + 1 && !isMenuActive){
                 blinkAndBuzzer(sequence[i], SEQUENCE_DELAY);
                 vTaskDelay(pdMS_TO_TICKS(250));

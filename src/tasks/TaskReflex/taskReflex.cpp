@@ -17,12 +17,30 @@ void blinkAndBuzzerReflex(int index, int delay){
 }
 
 void gameBeginRoutineReflex(){
-    for(int i = 0; i < 24; i++){
+    for(int i = 0; i < 1; i++){
+        for(int j = 0; j < 2;j++){
+            digitalWrite(RED_LED, HIGH);
+            digitalWrite(BLUE_LED, HIGH);
+            tone(BUZZER, ledToBuzzer[j]);
+            vTaskDelay(BEGINNING_DELAY);
+            digitalWrite(RED_LED, LOW);
+            digitalWrite(BLUE_LED, LOW);
+            vTaskDelay(BEGINNING_DELAY);
+        }
 
-        int index = (i+2) % 4;
+        for(int j = 0; j < 2;j++){
+            digitalWrite(YELLOW_LED, HIGH);
+            digitalWrite(GREEN_LED, HIGH);
+            tone(BUZZER, ledToBuzzer[j]);
+            vTaskDelay(BEGINNING_DELAY);
+            digitalWrite(YELLOW_LED, LOW);
+            digitalWrite(GREEN_LED, LOW);
+            vTaskDelay(BEGINNING_DELAY);
+        }
 
-        blinkAndBuzzerReflex(index, BEGINNING_DELAY);
     }
+    noTone(BUZZER);
+
 }
    
 void playSound(bool isCorrect, int randomLed){
@@ -63,14 +81,14 @@ void taskReflex(void * params){
         int gameBegin = millis();
         shouldRestart = false;
         score = 0;
-        while(millis() - gameBegin < 10000){
+        while(millis() - gameBegin < GAME_TIME){
 
             int randomLed = random(0,4);
             
             digitalWrite(indexToLed[randomLed], HIGH);
 
             last = millis();
-            while(millis()-last<1000){
+            while(millis()-last<RESPONSE_TIME){
                                 
                 if(xQueueReceive(inputQueue, &receivedButton, pdMS_TO_TICKS(10))== pdTRUE){
                     if((int) receivedButton == randomLed){
@@ -99,7 +117,7 @@ void taskReflex(void * params){
             }
 
             //User didn't give the input in time
-            if(millis() - last > 1000 && !playerGuess){
+            if(millis() - last > RESPONSE_TIME && !playerGuess){
                 playSound(false,randomLed);
             }
 
@@ -111,8 +129,8 @@ void taskReflex(void * params){
             //MUSIC PLAYS WHILE SHOWING THE SCORE
             //ASK IF THE SCORE IS GREATER THAN HIGHSCORE
             
-            if(score > getReflexHighScore()){
-                saveReflexHighScore(score);
+            if(score > getScore("reflex")){
+                saveScore("reflex",score);
                 Serial.println("PARABÉNS VOCÊ BATEU O NOVO RECORDE!!!!");
                 Serial.print(score);
                 Serial.println(" pts");
