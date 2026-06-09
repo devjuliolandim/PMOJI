@@ -31,6 +31,13 @@ void setup() {
     pinMode(BLUE_LED, OUTPUT);
     pinMode(GREEN_LED, OUTPUT);
 
+    // --- INICIALIZAÇÃO DE ENTRADAS (Botões com Pull-up interno) ---
+    pinMode(RED_BUTTON_PIN, INPUT_PULLUP);
+    pinMode(BLUE_BUTTON_PIN, INPUT_PULLUP);
+    pinMode(YELLOW_BUTTON_PIN, INPUT_PULLUP);
+    pinMode(GREEN_BUTTON_PIN, INPUT_PULLUP);
+    pinMode(WHITE_BUTTON_PIN, INPUT_PULLUP);
+
     inputQueue = xQueueCreate(10, sizeof(ButtonEvent));
 
     xTaskCreatePinnedToCore(
@@ -42,7 +49,6 @@ void setup() {
         NULL,
         0
     );
-
 
     xTaskCreatePinnedToCore(
         taskSimonSays,
@@ -84,17 +90,16 @@ void setup() {
         0
     );
 
-    // Inicializa a tela física
-    inicializarDisplay();
-  
-    // Desenha o menu inicial
-    desenharTelaStatus();
-
+    // Mapeamento organizado dos Handles das Tarefas
     menuOptionToTask[0] = simonTaskHandle;
     menuOptionToTask[1] = stroopTaskHandle;
     menuOptionToTask[2] = reflexTaskHandle;
     menuOptionToTask[3] = leaderboardTaskHandle;
-    
+
+    // Inicializa a tela física
+    inicializarDisplay();
+    desenharMenuPrincipal(opcaoSelecionada); 
+
 }
 
 void loop() {

@@ -4,6 +4,7 @@
 #include "queues.h"
 #include "taskHandles.h"
 #include "taskLeaderBoard.h"
+#include "taskDisplay.h"
 
 void taskLeaderBoard(void * params){
     
@@ -20,6 +21,11 @@ void taskLeaderBoard(void * params){
             Serial.println(getScore("reflex"));
             shouldPrint = false;
         }
+
+            estadoAtual = TELA_SCORES;
+            desenharTelaScores(getSimonHighScore(), getReflexHighScore());
+            
+            shouldPrint = false;
 
         if(xQueueReceive(inputQueue, &receivedButton, portMAX_DELAY)== pdTRUE && receivedButton == BTN_WHITE){
             vTaskResume(menuTaskHandle);

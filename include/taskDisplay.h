@@ -5,11 +5,20 @@
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_ST7789.h>
-#include "config.h" 
+#include "config.h"
+
+enum TelaEstado {
+    TELA_MENU,
+    TELA_SCORES
+};
+
 extern Adafruit_ST7789 tft;
+extern TelaEstado estadoAtual;
+extern int opcaoSelecionada;
 
-// Protótipos das funções que gerenciam a tela
 void inicializarDisplay();
-void desenharTelaStatus();
+void desenharMenuPrincipal(int itemSelecionado);
+void desenharTelaScores(int getSimonHighScore, int getReflexHighScore);
+void processarNavegacaoMenu();
 
-#endif // TASKDISPLAY_H
+#endif 
