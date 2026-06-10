@@ -96,8 +96,11 @@ void setup() {
     menuOptionToTask[2] = reflexTaskHandle;
     menuOptionToTask[3] = leaderboardTaskHandle;
 
-    // Inicializa a tela física
     inicializarDisplay();
+
+    estadoAtual = TELA_MENU; // Inicializa em modo Menu
+    opcaoSelecionada = 0;    // Foca na primeira opção 
+    
     desenharMenuPrincipal(opcaoSelecionada); 
 
 }

@@ -23,7 +23,7 @@ void taskLeaderBoard(void * params){
         }
 
             estadoAtual = TELA_SCORES;
-            desenharTelaScores(getSimonHighScore(), getReflexHighScore());
+            desenharTelaScores(getScore("simon"), getScore("reflex"));
             
             shouldPrint = false;
 

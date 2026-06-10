@@ -9,7 +9,10 @@
 
 enum TelaEstado {
     TELA_MENU,
-    TELA_SCORES
+    TELA_JOGOS,
+    TELA_SCORES,
+    TELA_GAMEPLAY_REFLEXO,
+    TELA_GAMEPLAY_SIMON
 };
 
 extern Adafruit_ST7789 tft;
@@ -18,7 +21,10 @@ extern int opcaoSelecionada;
 
 void inicializarDisplay();
 void desenharMenuPrincipal(int itemSelecionado);
+void desenharTelaJogos(int jogoSelecionado);
 void desenharTelaScores(int getSimonHighScore, int getReflexHighScore);
+void desenharGameplayReflexo(int scoreAtual);
+void desenharGameplaySimon(int scoreAtual);
 void processarNavegacaoMenu();
 
 #endif 

@@ -6,6 +6,7 @@
 #include "mapping.h"
 #include "globals.h"
 #include "storage.h"
+#include "taskDisplay.h"
 
 void blinkAndBuzzer(int index, int delay){
         digitalWrite(indexToLed[index], HIGH);
@@ -88,6 +89,9 @@ void taskSimonSays(void * params){
                 gameBeginRoutine();
             }
 
+            estadoAtual = TELA_GAMEPLAY_SIMON;
+            desenharGameplaySimon(counter);
+
             sequence[counter] = random(0,4);
 
             int i = 0;
@@ -139,11 +143,14 @@ void taskSimonSays(void * params){
                 counter = 0;
                 isBegining = true;
                 isGameOver = false;
+                estadoAtual = TELA_MENU;
+                desenharMenuPrincipal(opcaoSelecionada);
                 vTaskResume(menuTaskHandle);
                 vTaskSuspend(simonTaskHandle);
                 isMenuActive = false;
             }else if (!isGameOver){
                 counter++;
+                desenharGameplaySimon(counter);
             }
         }
     }

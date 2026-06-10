@@ -4,6 +4,7 @@
 #include "mapping.h"
 #include "queues.h"
 #include "storage.h"
+#include "taskDisplay.h"
 
 
 void blinkAndBuzzerReflex(int index, int delay){
@@ -81,6 +82,10 @@ void taskReflex(void * params){
         int gameBegin = millis();
         shouldRestart = false;
         score = 0;
+
+        estadoAtual = TELA_GAMEPLAY_REFLEXO;
+        desenharGameplayReflexo(score);
+
         while(millis() - gameBegin < GAME_TIME){
 
             int randomLed = random(0,4);
@@ -94,11 +99,14 @@ void taskReflex(void * params){
                     if((int) receivedButton == randomLed){
                         
                         score++;
+                        desenharGameplayReflexo(score);
                         playSound(true,randomLed);
                         playerGuess = true;
                         break;
                     }else if((ButtonEvent) receivedButton == BTN_WHITE){
                         digitalWrite(indexToLed[randomLed], LOW);
+                        estadoAtual = TELA_MENU;
+                        desenharMenuPrincipal(opcaoSelecionada);
                         vTaskResume(menuTaskHandle);
                         vTaskSuspend(reflexTaskHandle);
                         shouldRestart = true;
@@ -139,6 +147,11 @@ void taskReflex(void * params){
                 Serial.print(score);
                 Serial.println(" pts");
             }
+
+            estadoAtual = TELA_MENU;
+            desenharMenuPrincipal(opcaoSelecionada);
+            vTaskResume(menuTaskHandle);
+            vTaskSuspend(reflexTaskHandle);
 
         }
     }

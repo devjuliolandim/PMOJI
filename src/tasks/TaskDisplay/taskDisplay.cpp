@@ -20,37 +20,32 @@ void inicializarDisplay() {
 
     tft.init(240, 320); 
     tft.invertDisplay(true); 
-    tft.setRotation(1); // Modo Paisagem (320x240)
-    tft.fillScreen(~ST77XX_WHITE); // Fundo Preto Real
+    tft.setRotation(1); 
+    tft.fillScreen(~ST77XX_WHITE); 
 }
 
 void desenharMenuPrincipal(int itemSelecionado) {
-    tft.fillScreen(~ST77XX_WHITE); // Garante fundo Preto
+    tft.fillScreen(~ST77XX_WHITE); 
 
-    // --- INDICADOR DE BATERIA ---
     tft.setTextSize(1);
-    tft.setTextColor(~ST77XX_BLACK, ~ST77XX_WHITE); // Texto Branco no fundo Preto
+    tft.setTextColor(~ST77XX_BLACK, ~ST77XX_WHITE); 
     tft.setCursor(230, 10);
     tft.print("BATERIA: 100%");
 
-    // --- TÍTULO DO JOGO ---
     tft.setTextSize(3);
-    tft.setTextColor(~ST77XX_BLACK, ~ST77XX_WHITE); // Texto Branco
+    tft.setTextColor(~ST77XX_BLACK, ~ST77XX_WHITE); 
     tft.setCursor(45, 40);
     tft.println("P-MOJI CONSOLE");
 
-    // --- DESENHO DOS BOTÕES INTERATIVOS ---
     tft.setTextSize(2);
 
     // BOTÃO 0: INICIAR
     if (itemSelecionado == 0) {
-        // Selecionado: Fundo Vermelho, Texto Preto (Apagado)
         tft.fillRect(50, 100, 220, 40, ~ST77XX_RED);
         tft.setTextColor(~ST77XX_WHITE, ~ST77XX_RED); 
         tft.setCursor(105, 112);
         tft.print("INICIAR");
     } else {
-        // Normal: Fundo Azul, Texto Preto (Apagado)
         tft.fillRect(50, 100, 220, 40, ~ST77XX_BLUE);
         tft.setTextColor(~ST77XX_WHITE, ~ST77XX_BLUE);
         tft.setCursor(105, 112);
@@ -59,22 +54,19 @@ void desenharMenuPrincipal(int itemSelecionado) {
 
     // BOTÃO 1: SCORES
     if (itemSelecionado == 1) {
-        // Selecionado: Fundo Vermelho, Texto Preto (Apagado)
         tft.fillRect(50, 155, 220, 40, ~ST77XX_RED);
         tft.setTextColor(~ST77XX_WHITE, ~ST77XX_RED);
         tft.setCursor(115, 167);
         tft.print("SCORES");
     } else {
-        // Normal: Fundo Azul, Texto Preto (Apagado)
         tft.fillRect(50, 155, 220, 40, ~ST77XX_BLUE);
         tft.setTextColor(~ST77XX_WHITE, ~ST77XX_BLUE);
         tft.setCursor(115, 167);
         tft.print("SCORES");
     }
 
-    // --- RODAPÉ DE AJUDA ---
     tft.setTextSize(1);
-    tft.setTextColor(~ST77XX_YELLOW, ~ST77XX_WHITE); // Texto Amarelo
+    tft.setTextColor(~ST77XX_YELLOW, ~ST77XX_WHITE); 
     tft.setCursor(40, 215);
     tft.print("[VERMELHO] Mudar Botao  |  [VERDE] Confirmar");
 }
@@ -83,23 +75,140 @@ void desenharTelaScores(int getSimonHighScore, int getReflexHighScore) {
     tft.fillScreen(~ST77XX_WHITE); // Fundo Preto
 
     tft.setTextSize(3);
-    tft.setTextColor(~ST77XX_BLUE, ~ST77XX_WHITE); // Título em Azul Real
+    tft.setTextColor(~ST77XX_BLUE, (uint16_t)~ST77XX_WHITE); 
     tft.setCursor(65, 30);
     tft.println("TOP SCORES");
 
     tft.setTextSize(2);
-    tft.setTextColor(~ST77XX_BLACK, ~ST77XX_WHITE); // Texto Branco
+    tft.setTextColor(~ST77XX_BLACK, (uint16_t)~ST77XX_WHITE); 
+ 
     tft.setCursor(60, 90);
     tft.print("1. REFLEXO: ");
-    tft.print(getReflexHighScore);
+    tft.print(getReflexHighScore); 
+    tft.print(" ms");
+
     tft.setCursor(60, 130);
     tft.print("2. SIMON: ");
-    tft.print(getSimonHighScore);
+    tft.print(getSimonHighScore);  
 
     tft.setTextSize(1);
-    tft.setTextColor(~ST77XX_YELLOW, ~ST77XX_WHITE);
+    tft.setTextColor(~ST77XX_YELLOW, (uint16_t)~ST77XX_WHITE);
     tft.setCursor(75, 200);
     tft.print("[BRANCO] Voltar ao Menu Principal");
+}
+
+void desenharTelaJogos(int jogoSelecionado) {
+    tft.fillScreen(~ST77XX_WHITE); 
+
+    tft.setTextSize(1);
+    tft.setTextColor(~ST77XX_BLACK, (uint16_t)~ST77XX_WHITE);
+    tft.setCursor(230, 10);
+    tft.print("BATERIA: 100%");
+
+    tft.setTextSize(3);
+    tft.setTextColor(~ST77XX_BLUE, (uint16_t)~ST77XX_WHITE); 
+    tft.setCursor(45, 30);
+    tft.println("SELECIONE O JOGO");
+
+    tft.setTextSize(2);
+
+    if (jogoSelecionado == 0) {
+        tft.fillRect(40, 85, 240, 35, ~ST77XX_RED); 
+        tft.setTextColor(~ST77XX_WHITE, ~ST77XX_RED);
+        tft.setCursor(95, 95);
+        tft.print("SIMON SAYS");
+    } else {
+        tft.fillRect(40, 85, 240, 35, ~ST77XX_BLUE); 
+        tft.setTextColor(~ST77XX_WHITE, ~ST77XX_BLUE);
+        tft.setCursor(95, 95);
+        tft.print("SIMON SAYS");
+    }
+
+    if (jogoSelecionado == 1) {
+        tft.fillRect(40, 130, 240, 35, ~ST77XX_RED); 
+        tft.setTextColor(~ST77XX_WHITE, ~ST77XX_RED);
+        tft.setCursor(115, 140);
+        tft.print("REFLEXO");
+    } else {
+        tft.fillRect(40, 130, 240, 35, ~ST77XX_BLUE); 
+        tft.setTextColor(~ST77XX_WHITE, ~ST77XX_BLUE);
+        tft.setCursor(115, 140);
+        tft.print("REFLEXO");
+    }
+
+    if (jogoSelecionado == 2) {
+        tft.fillRect(40, 175, 240, 35, ~ST77XX_RED); 
+        tft.setTextColor(~ST77XX_WHITE, ~ST77XX_RED);
+        tft.setCursor(120, 185);
+        tft.print("STROOP");
+    } else {
+        tft.fillRect(40, 175, 240, 35, ~ST77XX_BLUE); 
+        tft.setTextColor(~ST77XX_WHITE, ~ST77XX_BLUE);
+        tft.setCursor(120, 185);
+        tft.print("STROOP");
+    }
+
+    tft.setTextSize(1);
+    tft.setTextColor(~ST77XX_YELLOW, (uint16_t)~ST77XX_WHITE);
+    tft.setCursor(25, 220);
+    tft.print("[VERMELHO] Mudar Jogo  |  [VERDE] Confirmar");
+}
+
+void desenharGameplayReflexo(int scoreAtual) {
+    tft.fillScreen(~ST77XX_WHITE); 
+
+    tft.setTextSize(1);
+    tft.setTextColor(~ST77XX_BLACK, (uint16_t)~ST77XX_WHITE);
+    tft.setCursor(230, 10);
+    tft.print("BATERIA: 100%");
+
+    tft.setTextSize(2);
+    tft.setTextColor(~ST77XX_YELLOW, (uint16_t)~ST77XX_WHITE);
+    tft.setCursor(95, 40);
+    tft.print("JOGO REFLEXO");
+
+    tft.setTextSize(2);
+    tft.setTextColor(~ST77XX_WHITE, (uint16_t)~ST77XX_WHITE);
+    tft.setCursor(110, 100);
+    tft.print("PONTOS");
+
+    tft.setTextSize(6);
+    tft.setTextColor(~ST77XX_GREEN, (uint16_t)~ST77XX_WHITE);
+    
+    if (scoreAtual < 10) {
+        tft.setCursor(145, 140);
+    } else {
+        tft.setCursor(130, 140);
+    }
+    tft.print(scoreAtual);
+}
+
+void desenharGameplaySimon(int scoreAtual) {
+    tft.fillScreen(~ST77XX_WHITE); 
+    tft.setTextSize(1);
+    tft.setTextColor(~ST77XX_BLACK, (uint16_t)~ST77XX_WHITE);
+    tft.setCursor(230, 10);
+    tft.print("BATERIA: 100%");
+
+    tft.setTextSize(2);
+    tft.setTextColor(~ST77XX_YELLOW, (uint16_t)~ST77XX_WHITE); 
+    tft.setCursor(105, 40);
+    tft.print("SIMON SAYS");
+
+    tft.setTextSize(2);
+    tft.setTextColor(~ST77XX_WHITE, (uint16_t)~ST77XX_WHITE);
+    tft.setCursor(100, 100);
+    tft.print("SEQUENCIA");
+
+    tft.setTextSize(6);
+    tft.setTextColor(~ST77XX_GREEN, (uint16_t)~ST77XX_WHITE);
+    
+    if (scoreAtual < 10) {
+        tft.setCursor(145, 140);
+    } else {
+        tft.setCursor(130, 140);
+    }
+    tft.print(scoreAtual);
 }
 
 void processarNavegacaoMenu() {
