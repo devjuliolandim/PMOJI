@@ -10,7 +10,7 @@ int opcaoSelecionada = 0; // 0 = INICIAR, 1 = SCORES
 
 void inicializarDisplay() {
     pinMode(TFT_LED, OUTPUT);
-    analogWrite(TFT_LED, 128); 
+    analogWrite(TFT_LED, 128); // Brilho em 50%
 
     pinMode(TFT_RST, OUTPUT);
     digitalWrite(TFT_RST, LOW);
@@ -20,7 +20,7 @@ void inicializarDisplay() {
 
     tft.init(240, 320); 
     tft.invertDisplay(true); 
-    tft.setRotation(1); 
+    tft.setRotation(1); // Modo Paisagem
     tft.fillScreen(~ST77XX_WHITE); 
 }
 
@@ -39,31 +39,27 @@ void desenharMenuPrincipal(int itemSelecionado) {
 
     tft.setTextSize(2);
 
-    // BOTÃO 0: INICIAR
+    // Botão Iniciar
     if (itemSelecionado == 0) {
         tft.fillRect(50, 100, 220, 40, ~ST77XX_RED);
         tft.setTextColor(~ST77XX_WHITE, ~ST77XX_RED); 
-        tft.setCursor(105, 112);
-        tft.print("INICIAR");
     } else {
         tft.fillRect(50, 100, 220, 40, ~ST77XX_BLUE);
         tft.setTextColor(~ST77XX_WHITE, ~ST77XX_BLUE);
-        tft.setCursor(105, 112);
-        tft.print("INICIAR");
     }
+    tft.setCursor(105, 112);
+    tft.print("INICIAR");
 
-    // BOTÃO 1: SCORES
+    // Botão Scores
     if (itemSelecionado == 1) {
         tft.fillRect(50, 155, 220, 40, ~ST77XX_RED);
         tft.setTextColor(~ST77XX_WHITE, ~ST77XX_RED);
-        tft.setCursor(115, 167);
-        tft.print("SCORES");
     } else {
         tft.fillRect(50, 155, 220, 40, ~ST77XX_BLUE);
         tft.setTextColor(~ST77XX_WHITE, ~ST77XX_BLUE);
-        tft.setCursor(115, 167);
-        tft.print("SCORES");
     }
+    tft.setCursor(115, 167);
+    tft.print("SCORES");
 
     tft.setTextSize(1);
     tft.setTextColor(~ST77XX_YELLOW, ~ST77XX_WHITE); 
@@ -72,7 +68,7 @@ void desenharMenuPrincipal(int itemSelecionado) {
 }
 
 void desenharTelaScores(int getSimonHighScore, int getReflexHighScore) {
-    tft.fillScreen(~ST77XX_WHITE); // Fundo Preto
+    tft.fillScreen(~ST77XX_WHITE); 
 
     tft.setTextSize(3);
     tft.setTextColor(~ST77XX_BLUE, (uint16_t)~ST77XX_WHITE); 
@@ -112,41 +108,38 @@ void desenharTelaJogos(int jogoSelecionado) {
 
     tft.setTextSize(2);
 
+    // Opção Simon Says
     if (jogoSelecionado == 0) {
         tft.fillRect(40, 85, 240, 35, ~ST77XX_RED); 
         tft.setTextColor(~ST77XX_WHITE, ~ST77XX_RED);
-        tft.setCursor(95, 95);
-        tft.print("SIMON SAYS");
     } else {
         tft.fillRect(40, 85, 240, 35, ~ST77XX_BLUE); 
         tft.setTextColor(~ST77XX_WHITE, ~ST77XX_BLUE);
-        tft.setCursor(95, 95);
-        tft.print("SIMON SAYS");
     }
+    tft.setCursor(95, 95);
+    tft.print("SIMON SAYS");
 
+    // Opção Reflexo
     if (jogoSelecionado == 1) {
         tft.fillRect(40, 130, 240, 35, ~ST77XX_RED); 
         tft.setTextColor(~ST77XX_WHITE, ~ST77XX_RED);
-        tft.setCursor(115, 140);
-        tft.print("REFLEXO");
     } else {
         tft.fillRect(40, 130, 240, 35, ~ST77XX_BLUE); 
         tft.setTextColor(~ST77XX_WHITE, ~ST77XX_BLUE);
-        tft.setCursor(115, 140);
-        tft.print("REFLEXO");
     }
+    tft.setCursor(115, 140);
+    tft.print("REFLEXO");
 
+    // Opção Stroop
     if (jogoSelecionado == 2) {
         tft.fillRect(40, 175, 240, 35, ~ST77XX_RED); 
         tft.setTextColor(~ST77XX_WHITE, ~ST77XX_RED);
-        tft.setCursor(120, 185);
-        tft.print("STROOP");
     } else {
         tft.fillRect(40, 175, 240, 35, ~ST77XX_BLUE); 
         tft.setTextColor(~ST77XX_WHITE, ~ST77XX_BLUE);
-        tft.setCursor(120, 185);
-        tft.print("STROOP");
     }
+    tft.setCursor(120, 185);
+    tft.print("STROOP");
 
     tft.setTextSize(1);
     tft.setTextColor(~ST77XX_YELLOW, (uint16_t)~ST77XX_WHITE);
@@ -175,6 +168,7 @@ void desenharGameplayReflexo(int scoreAtual) {
     tft.setTextSize(6);
     tft.setTextColor(~ST77XX_GREEN, (uint16_t)~ST77XX_WHITE);
     
+    // Centralização dinâmica do Score
     if (scoreAtual < 10) {
         tft.setCursor(145, 140);
     } else {
@@ -203,6 +197,7 @@ void desenharGameplaySimon(int scoreAtual) {
     tft.setTextSize(6);
     tft.setTextColor(~ST77XX_GREEN, (uint16_t)~ST77XX_WHITE);
     
+    // Centralização dinâmica da Sequência
     if (scoreAtual < 10) {
         tft.setCursor(145, 140);
     } else {
