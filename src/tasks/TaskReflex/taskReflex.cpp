@@ -4,7 +4,8 @@
 #include "mapping.h"
 #include "queues.h"
 #include "storage.h"
-
+#include "globals.h"
+#include "taskDifficulty.h"
 
 void blinkAndBuzzerReflex(int index, int delay){
         digitalWrite(indexToLed[index], HIGH);
@@ -66,7 +67,6 @@ void taskReflex(void * params){
 
     ButtonEvent receivedButton;
 
-
     int now, last;
     int score = 0;
     int buttonTimesOut = true;
@@ -75,8 +75,10 @@ void taskReflex(void * params){
     bool shouldRestart = false;
 
     while(true){
-        
+    
+        inputsEnabled = false;
         gameBeginRoutineReflex();
+        inputsEnabled = true;
 
         int gameBegin = millis();
         shouldRestart = false;
@@ -88,7 +90,7 @@ void taskReflex(void * params){
             digitalWrite(indexToLed[randomLed], HIGH);
 
             last = millis();
-            while(millis()-last<RESPONSE_TIME){
+            while(millis()-last<(RESPONSE_TIME - 300 * currentDifficulty)){
                                 
                 if(xQueueReceive(inputQueue, &receivedButton, pdMS_TO_TICKS(10))== pdTRUE){
                     if((int) receivedButton == randomLed){
@@ -117,7 +119,7 @@ void taskReflex(void * params){
             }
 
             //User didn't give the input in time
-            if(millis() - last > RESPONSE_TIME && !playerGuess){
+            if(!playerGuess){
                 playSound(false,randomLed);
             }
 

@@ -16,3 +16,9 @@ enum MenuOption{
     REFLEX,
     LEADERBOARD
 };
+
+enum Difficulty {
+    EASY,
+    MEDIUM,
+    HARD
+};

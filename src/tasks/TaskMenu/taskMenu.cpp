@@ -7,10 +7,13 @@
 #include "config.h"
 #include "mapping.h"
 
+
+MenuOption currentMenuOption = SIMONSAYS;
+MenuOption lastMenuOption = LEADERBOARD;
+
 void taskMenu(void *params){
     ButtonEvent receivedButton;
-    MenuOption currentMenuOption = SIMONSAYS;
-    MenuOption lastMenuOption = LEADERBOARD;
+    
 
     digitalWrite(RED_LED, LOW);
     digitalWrite(YELLOW_LED, LOW);
@@ -24,6 +27,8 @@ void taskMenu(void *params){
     vTaskSuspend(simonTaskHandle);
     vTaskSuspend(leaderboardTaskHandle);
     vTaskSuspend(reflexTaskHandle);
+    vTaskSuspend(stroopTaskHandle);
+    vTaskSuspend(difficultyTaskHandle);
     
     while(true){
 
@@ -42,8 +47,17 @@ void taskMenu(void *params){
                 break;
 
                 case BTN_BLUE:
-                    vTaskResume(menuOptionToTask[currentMenuOption]);
+
+                    //vTaskResume no de escolher dificuldade
+                    //vTaskSuspend a si próprio
+                    digitalWrite(menuOptionToLed[currentMenuOption], LOW);
+                    if(currentMenuOption != LEADERBOARD){
+                        vTaskResume(difficultyTaskHandle);
+                    }else{
+                        vTaskResume(menuOptionToTask[currentMenuOption]);
+                    }
                     vTaskSuspend(menuTaskHandle);
+                    
 
                     //When it returns, the primary state is
                     // CurrentOption -> SIMONSAYS -> RED LED
@@ -64,7 +78,7 @@ void taskMenu(void *params){
                 tone(BUZZER,ledToBuzzer[currentMenuOption]);
                 vTaskDelay(pdMS_TO_TICKS(100));
                 noTone(BUZZER);
-                Serial.println("Hi");
+                Serial.println("Trocou de opção");
             }
         }
         

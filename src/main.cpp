@@ -10,6 +10,8 @@
 #include "taskSimonSays.h"
 #include "taskLeaderBoard.h"
 #include "taskReflex.h"
+#include "taskStroop.h"
+#include "taskDifficulty.h"
 
 QueueHandle_t inputQueue;
 TaskHandle_t menuTaskHandle = NULL;
@@ -17,6 +19,7 @@ TaskHandle_t simonTaskHandle = NULL;
 TaskHandle_t stroopTaskHandle = NULL;
 TaskHandle_t reflexTaskHandle = NULL;
 TaskHandle_t leaderboardTaskHandle = NULL;
+TaskHandle_t difficultyTaskHandle = NULL;
 
 TaskHandle_t menuOptionToTask[4];
 
@@ -29,6 +32,8 @@ void setup() {
     pinMode(YELLOW_LED, OUTPUT);
     pinMode(BLUE_LED, OUTPUT);
     pinMode(GREEN_LED, OUTPUT);
+
+    pinMode(BUZZER, OUTPUT);
 
     inputQueue = xQueueCreate(10, sizeof(ButtonEvent));
 
@@ -64,6 +69,16 @@ void setup() {
     );
 
     xTaskCreatePinnedToCore(
+        taskStroop,
+        "Stroop",
+        8192,
+        NULL,
+        1,
+        &stroopTaskHandle,
+        1
+    );
+
+    xTaskCreatePinnedToCore(
         taskLeaderBoard,
         "LeaderBoard",
         4096,
@@ -73,6 +88,16 @@ void setup() {
         1
     );
     
+    xTaskCreatePinnedToCore(
+        taskDifficulty,
+        "taskDifficulty",
+        2048,
+        NULL,
+        1,
+        &difficultyTaskHandle,
+        0
+    );
+
     xTaskCreatePinnedToCore(
         taskMenu,
         "Task Menu",
@@ -87,7 +112,8 @@ void setup() {
     menuOptionToTask[1] = stroopTaskHandle;
     menuOptionToTask[2] = reflexTaskHandle;
     menuOptionToTask[3] = leaderboardTaskHandle;
-    
+    vTaskSuspend(difficultyTaskHandle);
+    vTaskSuspend(reflexTaskHandle);
 }
 
 void loop() {

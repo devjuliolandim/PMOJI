@@ -16,8 +16,11 @@ void taskLeaderBoard(void * params){
             Serial.println("RECORDES: ");   
             Serial.print("Simon Says: ");
             Serial.println(getScore("simon"));
+            Serial.print("Stroop:");
+            Serial.println(getScore("stroop"));
             Serial.print("Reflex: ");
             Serial.println(getScore("reflex"));
+            
             shouldPrint = false;
         }
 
