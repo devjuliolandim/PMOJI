@@ -7,6 +7,7 @@
 #include "storage.h"
 #include "taskDifficulty.h"
 #include "taskInput.h"
+#include "globals.h"
 
 void blinkAndBuzzer(int index, int delay){
         digitalWrite(indexToLed[index], HIGH);
@@ -55,30 +56,30 @@ void taskSimonSays(void * params){
     ButtonEvent receivedButton;
 
     int sequence[SEQUENCE_SIZE];
-    int counter = 0;
+    score = 0;
 
     bool isBegining = true;
     bool isGameOver = false;
     bool isMenuActive = false;
 
     while(true){
-        while(counter < SEQUENCE_SIZE && !isMenuActive){
+        while(score < SEQUENCE_SIZE && !isMenuActive){
             
             if(isGameOver){
 
                 int highScore = getScore("simon");
 
-                if(counter > highScore){
+                if(score > highScore){
 
                     Serial.print("NOVO HIGHSCORE: ");
-                    Serial.println(counter);
+                    Serial.println(score);
                     Serial.print("ANTIGO HIGHSCORE: ");
                     Serial.println(getScore("simon"));
-                    highScore = counter;
+                    highScore = score;
                     saveScore("simon",highScore);
                 }
 
-                counter = 0;
+                score = 0;
                 isGameOver = false;
                 gameOverRoutine();
             }
@@ -89,7 +90,7 @@ void taskSimonSays(void * params){
                 gameBeginRoutine();
             }
 
-            sequence[counter] = random(0,4);
+            sequence[score] = random(0,4);
 
             int i = 0;
 
@@ -101,7 +102,7 @@ void taskSimonSays(void * params){
 
 
             vTaskDelay(pdMS_TO_TICKS(350));            
-            while(i < counter + 1 && !isMenuActive){
+            while(i < score + 1 && !isMenuActive){
                 blinkAndBuzzer(sequence[i], SEQUENCE_DELAY - 50 * currentDifficulty);
                 vTaskDelay(pdMS_TO_TICKS(250 - 50* currentDifficulty));
                 i++;
@@ -113,7 +114,7 @@ void taskSimonSays(void * params){
             xQueueReset(inputQueue);
             inputsEnabled = true;
 
-            while(i < counter + 1 && !isMenuActive){
+            while(i < score + 1 && !isMenuActive){
 
                 if(xQueueReceive(inputQueue, &receivedButton, portMAX_DELAY)== pdTRUE){
 
@@ -137,14 +138,14 @@ void taskSimonSays(void * params){
             }
 
             if(isMenuActive){
-                counter = 0;
+                score = 0;
                 isBegining = true;
                 isGameOver = false;
                 vTaskResume(menuTaskHandle);
                 vTaskSuspend(simonTaskHandle);
                 isMenuActive = false;
             }else if (!isGameOver){
-                counter++;
+                score++;
             }
         }
     }

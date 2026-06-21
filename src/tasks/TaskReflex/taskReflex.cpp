@@ -6,6 +6,7 @@
 #include "storage.h"
 #include "taskDifficulty.h"
 #include "taskInput.h"
+#include "globals.h"
 
 void gameBeginRoutineReflex(){
     for(int i = 0; i < 1; i++){
@@ -58,7 +59,7 @@ void taskReflex(void * params){
     ButtonEvent receivedButton;
 
     int now, last;
-    int score = 0;
+    score = 0;
     int buttonTimesOut = true;
 
     bool playerGuess = false;

@@ -9,6 +9,7 @@
 #include <string>
 #include <algorithm>
 #include <random> 
+#include "globals.h"
 
 std::vector<String> words = {"Vermelho", "Amarelo", "Azul", "Verde"};
 std::vector<int> nums = {0,1,2,3};
@@ -18,7 +19,7 @@ void taskStroop(void * params){
     ButtonEvent receivedButton;
 
     int now, last;
-    int score = 0;
+    score = 0;
     int buttonTimesOut = true;
 
     bool playerGuess = false;
