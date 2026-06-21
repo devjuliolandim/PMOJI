@@ -12,59 +12,53 @@ Difficulty currentDifficulty = EASY;
 void taskDifficulty(void * params){
 
     ButtonEvent receivedButton;
-    bool isValidInput = true;
 
-
-    // === DEBUG PURPOSE 
-    bool shouldPrint = true;
+    int brightness = 0;
+    int step = 5;
 
     while(true){
+        if(xQueueReceive(inputQueue, &receivedButton, pdMS_TO_TICKS(20))== pdTRUE){
+            if(receivedButton != BTN_GREEN && receivedButton != BTN_WHITE){
+                
+                for(int i = 0; i < 4; i++){
+                    pinMode(indexToLed[i], OUTPUT);
+                    digitalWrite(indexToLed[i], LOW);
+                }
 
-        if(shouldPrint){
-            Serial.println("Escolha a dificuldade: ");
-            Serial.println("AZUL - EASY");
-            Serial.println("AMARELO - MEDIUM");
-            Serial.println("VERMELHO - HARD");
-            shouldPrint = false;
-        }
+                switch(receivedButton){
+                    case BTN_RED:
+                        currentDifficulty = HARD;
+                    break;
 
-        if(xQueueReceive(inputQueue, &receivedButton, portMAX_DELAY)== pdTRUE){
-            switch(receivedButton){
-                case BTN_RED:
-                    currentDifficulty = HARD;
-                break;
+                    case BTN_YELLOW:
+                        currentDifficulty = MEDIUM;
+                    break;
 
-                case BTN_YELLOW:
-                    currentDifficulty = MEDIUM;
-                break;
+                    case BTN_BLUE:
+                        currentDifficulty = EASY;
+                    break;
+                }
 
-                case BTN_BLUE:
-                    currentDifficulty = EASY;
-                break;
-
-                case BTN_WHITE:
-                    vTaskResume(menuTaskHandle);
-                    vTaskSuspend(difficultyTaskHandle);
-                    shouldPrint = true;
-                    isValidInput = false;
-                break;
-
-                default:
-                    isValidInput = false;
-                break;
-            }
-
-            if(isValidInput){
-                //Inicia o jogo
-                //Suspende a si proprio
                 vTaskResume(menuOptionToTask[currentMenuOption]);
                 vTaskSuspend(difficultyTaskHandle);
-                shouldPrint = true;
-            }else{
-                isValidInput = true;
+            }else if(receivedButton == BTN_WHITE){
+                for(int i = 0; i < 4; i++){
+                    analogWrite(indexToLed[i], 0);
+                }
+                vTaskResume(menuTaskHandle);
+                vTaskSuspend(difficultyTaskHandle);
+                brightness = 0;
+                step = 5;
             }
-
         }
+
+        brightness += step;
+
+        analogWrite(menuOptionToLed[currentMenuOption],brightness);
+        if(brightness >= 255 || brightness <=0){
+            step = -step;
+        }
+        
     }
 
 }

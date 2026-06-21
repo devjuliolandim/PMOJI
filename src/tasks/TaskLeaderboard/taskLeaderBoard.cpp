@@ -5,6 +5,7 @@
 #include "taskHandles.h"
 #include "taskLeaderBoard.h"
 #include "taskDifficulty.h"
+#include "config.h"
 
 const char* difficulties[3] = {"EASY","MEDIUM","HARD"};
 const char* gameNames[3] = {"Simon Says", "Reflexo", "Stroop"};
@@ -16,6 +17,8 @@ void taskLeaderBoard(void * params){
     bool shouldPrint = true;
     
     while(true){
+
+        digitalWrite(GREEN_LED, HIGH);
 
         if(shouldPrint){
             Serial.println("RECORDES: ");  
@@ -35,6 +38,7 @@ void taskLeaderBoard(void * params){
 
         if(xQueueReceive(inputQueue, &receivedButton, portMAX_DELAY)== pdTRUE && receivedButton == BTN_WHITE){
             vTaskResume(menuTaskHandle);
+            digitalWrite(GREEN_LED, LOW);
             vTaskSuspend(leaderboardTaskHandle);
             shouldPrint = true;
         }

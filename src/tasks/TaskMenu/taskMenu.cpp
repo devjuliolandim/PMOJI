@@ -7,9 +7,7 @@
 #include "config.h"
 #include "mapping.h"
 
-
 MenuOption currentMenuOption = SIMONSAYS;
-MenuOption lastMenuOption = LEADERBOARD;
 
 void pmojiOpening(){
 
@@ -75,8 +73,6 @@ void pmojiOpening(){
 
     vTaskDelay(pdMS_TO_TICKS(100));
 
-    // Volta para o LED do menu atual
-    digitalWrite(menuOptionToLed[currentMenuOption], HIGH);
 }
 
 
@@ -89,9 +85,6 @@ void taskMenu(void *params){
     digitalWrite(BLUE_LED, LOW);
     digitalWrite(GREEN_LED, LOW);
 
-    digitalWrite(menuOptionToLed[currentMenuOption], HIGH);
-
-
     //Suspend games tasks before choosing one
     vTaskSuspend(simonTaskHandle);
     vTaskSuspend(leaderboardTaskHandle);
@@ -100,58 +93,62 @@ void taskMenu(void *params){
     vTaskSuspend(difficultyTaskHandle);
     
     pmojiOpening();
-
+    int brightness = 0;
+    int step = 5;
+    
     while(true){
-
-
-        if(xQueueReceive(inputQueue, &receivedButton, portMAX_DELAY)== pdTRUE){
-            lastMenuOption = currentMenuOption;
-            switch (receivedButton){
-
-
-                case BTN_RED:
-                    currentMenuOption = (MenuOption) ((currentMenuOption - 1 + MENU_OPTIONS_SIZE)%MENU_OPTIONS_SIZE);
-                break;
+        if(xQueueReceive(inputQueue, &receivedButton, pdMS_TO_TICKS(20))== pdTRUE){
             
-                case BTN_YELLOW:
-                    currentMenuOption = (MenuOption) ((currentMenuOption + 1)%MENU_OPTIONS_SIZE);
-                break;
+            if(receivedButton != BTN_WHITE){
 
-                case BTN_BLUE:
+                for(int i = 0; i < 4; i++){
+                    analogWrite(indexToLed[i], 0);
+                }
 
-                    //vTaskResume no de escolher dificuldade
-                    //vTaskSuspend a si próprio
-                    digitalWrite(menuOptionToLed[currentMenuOption], LOW);
-                    if(currentMenuOption != LEADERBOARD){
-                        vTaskResume(difficultyTaskHandle);
-                    }else{
-                        vTaskResume(menuOptionToTask[currentMenuOption]);
+                switch (receivedButton){
+                    case BTN_RED:
+                        currentMenuOption = SIMONSAYS;
+                    break;
+                
+                    case BTN_YELLOW:
+                        currentMenuOption = STROOP;
+                    break;
+
+                    case BTN_BLUE:
+                        currentMenuOption = REFLEX;
+                    break;
+
+                    case BTN_GREEN:
+                        currentMenuOption = LEADERBOARD;
+                    break;
+                }
+                if(receivedButton != BTN_GREEN){
+                    vTaskResume(difficultyTaskHandle);
+                }else{
+                    for(int i = 0; i < 4; i++){
+                        pinMode(indexToLed[i], OUTPUT);
+                        digitalWrite(indexToLed[i], LOW);
                     }
-                    vTaskSuspend(menuTaskHandle);
-                    
-
-                    //When it returns, the primary state is
-                    // CurrentOption -> SIMONSAYS -> RED LED
-                    // LastOption -> LEADERBOARD
-                    currentMenuOption = SIMONSAYS;
-                    lastMenuOption = LEADERBOARD;
-                break;
-
-
-                default:
-                break;
+                    vTaskResume(leaderboardTaskHandle);
+                }
+                vTaskSuspend(menuTaskHandle);
+                brightness = 0;
+                step = 5;
             } 
-
-
-            if(currentMenuOption!= lastMenuOption){
-                digitalWrite(menuOptionToLed[currentMenuOption], HIGH);
-                digitalWrite(menuOptionToLed[lastMenuOption], LOW);
-                tone(BUZZER,ledToBuzzer[currentMenuOption]);
-                vTaskDelay(pdMS_TO_TICKS(100));
-                noTone(BUZZER);
-                Serial.println("Trocou de opção");
-            }
         }
-        
+
+
+        brightness += step;
+
+        if(brightness >= 255 || brightness <= 0){
+            step = -step;
+        }
+
+        analogWrite(RED_LED, brightness);
+        analogWrite(YELLOW_LED, brightness);
+        analogWrite(BLUE_LED, brightness);
+        analogWrite(GREEN_LED, brightness);
     }
+
+    
 }
