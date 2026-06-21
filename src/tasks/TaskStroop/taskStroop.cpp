@@ -4,6 +4,7 @@
 #include "mapping.h"
 #include "queues.h"
 #include "storage.h"
+#include "taskDifficulty.h"
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -52,7 +53,7 @@ void taskStroop(void * params){
         
 
             last = millis();
-            while(millis()-last<RESPONSE_TIME){
+            while(millis()-last<RESPONSE_TIME - 300 * currentDifficulty){
                                 
                 if(xQueueReceive(inputQueue, &receivedButton, pdMS_TO_TICKS(10))== pdTRUE){
                     if((int) receivedButton == nums[1]){

@@ -4,18 +4,8 @@
 #include "mapping.h"
 #include "queues.h"
 #include "storage.h"
-#include "globals.h"
 #include "taskDifficulty.h"
-
-void blinkAndBuzzerReflex(int index, int delay){
-        digitalWrite(indexToLed[index], HIGH);
-        tone(BUZZER, ledToBuzzer[index]);
-
-        vTaskDelay(pdMS_TO_TICKS(delay));
-
-        digitalWrite(indexToLed[index], LOW);
-        noTone(BUZZER);
-}
+#include "taskInput.h"
 
 void gameBeginRoutineReflex(){
     for(int i = 0; i < 1; i++){

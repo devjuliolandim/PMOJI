@@ -4,6 +4,11 @@
 #include "queues.h"
 #include "taskHandles.h"
 #include "taskLeaderBoard.h"
+#include "taskDifficulty.h"
+
+const char* difficulties[3] = {"EASY","MEDIUM","HARD"};
+const char* gameNames[3] = {"Simon Says", "Reflexo", "Stroop"};
+const char* gameIds[3] = {"simon","reflex","stroop"};
 
 void taskLeaderBoard(void * params){
     
@@ -13,14 +18,18 @@ void taskLeaderBoard(void * params){
     while(true){
 
         if(shouldPrint){
-            Serial.println("RECORDES: ");   
-            Serial.print("Simon Says: ");
-            Serial.println(getScore("simon"));
-            Serial.print("Stroop:");
-            Serial.println(getScore("stroop"));
-            Serial.print("Reflex: ");
-            Serial.println(getScore("reflex"));
-            
+            Serial.println("RECORDES: ");  
+
+            for(int i = 0; i < 3;i++){
+                Serial.println(difficulties[i]);
+                currentDifficulty = (Difficulty) i;
+                for(int j = 0; j < 3; j++){
+                    Serial.print(gameNames[j]);
+                    Serial.print(": ");
+                    Serial.println(getScore(gameIds[j]));
+                }
+                Serial.println("\n");
+            }
             shouldPrint = false;
         }
 

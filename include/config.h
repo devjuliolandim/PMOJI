@@ -7,7 +7,6 @@
 #define BLUE_LED       4
 #define YELLOW_LED     2
 #define GREEN_LED      5
-#define WHITE_LED     19
 
 // Buttons
 #define RED_BUTTON_PIN     13
@@ -18,3 +17,6 @@
 
 // Buzzer
 #define BUZZER         25
+
+//Battery
+#define BATTERY_PIN  789

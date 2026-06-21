@@ -4,8 +4,10 @@
 #include "states.h"
 #include "queues.h"
 #include "mapping.h"
-#include "globals.h"
 #include "taskInput.h"
+
+
+bool inputsEnabled = true;
 
 
 //DEBUG PURPOSE ONLY
@@ -38,7 +40,7 @@ void taskInput(void *params){
     pinMode(GREEN_BUTTON_PIN, INPUT_PULLUP);
     pinMode(WHITE_BUTTON_PIN, INPUT_PULLUP);
     
-    
+
     while(true){
         event = ButtonEvent::BTN_NONE;
         

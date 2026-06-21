@@ -4,8 +4,9 @@
 #include "random"
 #include "queues.h"
 #include "mapping.h"
-#include "globals.h"
 #include "storage.h"
+#include "taskDifficulty.h"
+#include "taskInput.h"
 
 void blinkAndBuzzer(int index, int delay){
         digitalWrite(indexToLed[index], HIGH);
@@ -101,8 +102,8 @@ void taskSimonSays(void * params){
 
             vTaskDelay(pdMS_TO_TICKS(350));            
             while(i < counter + 1 && !isMenuActive){
-                blinkAndBuzzer(sequence[i], SEQUENCE_DELAY);
-                vTaskDelay(pdMS_TO_TICKS(250));
+                blinkAndBuzzer(sequence[i], SEQUENCE_DELAY - 50 * currentDifficulty);
+                vTaskDelay(pdMS_TO_TICKS(250 - 50* currentDifficulty));
                 i++;
             }
 
