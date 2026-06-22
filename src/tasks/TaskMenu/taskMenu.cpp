@@ -7,7 +7,8 @@
 #include "config.h"
 #include "mapping.h"
 
-MenuOption currentMenuOption = SIMONSAYS;
+GameState currentGameState = MENU;
+MenuOption currentMenuOption = SIMONSAYS_OPT;
 
 void pmojiOpening(){
 
@@ -107,31 +108,35 @@ void taskMenu(void *params){
 
                 switch (receivedButton){
                     case BTN_RED:
-                        currentMenuOption = SIMONSAYS;
+                        currentMenuOption = SIMONSAYS_OPT;
                     break;
                 
                     case BTN_YELLOW:
-                        currentMenuOption = STROOP;
+                        currentMenuOption = STROOP_OPT;
                     break;
 
                     case BTN_BLUE:
-                        currentMenuOption = REFLEX;
+                        currentMenuOption = REFLEX_OPT;
                     break;
 
                     case BTN_GREEN:
-                        currentMenuOption = LEADERBOARD;
+                        currentMenuOption = LEADERBOARD_OPT;
                     break;
                 }
                 if(receivedButton != BTN_GREEN){
+                    currentGameState = DIFFICULTY;
                     vTaskResume(difficultyTaskHandle);
                 }else{
                     for(int i = 0; i < 4; i++){
                         pinMode(indexToLed[i], OUTPUT);
                         digitalWrite(indexToLed[i], LOW);
                     }
+
+                    currentGameState = LEADERBOARD;
                     vTaskResume(leaderboardTaskHandle);
                 }
                 vTaskSuspend(menuTaskHandle);
+                currentGameState = MENU;
                 brightness = 0;
                 step = 5;
             } 

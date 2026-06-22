@@ -33,7 +33,7 @@ void taskStroop(void * params){
         
        // gameBeginRoutineReflex();
        // change for stroop
-
+        xQueueReset(inputQueue);
         int gameBegin = millis();
         shouldRestart = false;
         score = 0;
@@ -54,6 +54,7 @@ void taskStroop(void * params){
         
 
             last = millis();
+            xQueueReset(inputQueue);
             while(millis()-last<RESPONSE_TIME - 300 * currentDifficulty){
                                 
                 if(xQueueReceive(inputQueue, &receivedButton, pdMS_TO_TICKS(10))== pdTRUE){

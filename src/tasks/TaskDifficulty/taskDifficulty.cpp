@@ -39,6 +39,7 @@ void taskDifficulty(void * params){
                     break;
                 }
 
+                currentGameState = (GameState)currentMenuOption;
                 vTaskResume(menuOptionToTask[currentMenuOption]);
                 vTaskSuspend(difficultyTaskHandle);
             }else if(receivedButton == BTN_WHITE){

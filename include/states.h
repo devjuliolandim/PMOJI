@@ -10,11 +10,20 @@ enum ButtonEvent {
     BTN_NONE // Of course this is the case that none was pressed
 };
 
-enum MenuOption{
+enum GameState{
     SIMONSAYS,
     STROOP,
     REFLEX,
-    LEADERBOARD
+    LEADERBOARD,
+    MENU,
+    DIFFICULTY
+};
+
+enum MenuOption {
+    SIMONSAYS_OPT,
+    STROOP_OPT,
+    REFLEX_OPT,
+    LEADERBOARD_OPT
 };
 
 enum Difficulty {
@@ -22,3 +31,6 @@ enum Difficulty {
     MEDIUM,
     HARD
 };
+
+extern GameState currentGameState;
+extern MenuOption currentMenuOption;

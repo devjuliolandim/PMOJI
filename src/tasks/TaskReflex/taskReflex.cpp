@@ -43,6 +43,7 @@ void taskReflex(void * params){
     
         inputsEnabled = false;
         gameBeginRoutine();
+        xQueueReset(inputQueue);
         inputsEnabled = true;
 
         int gameBegin = millis();
@@ -55,11 +56,12 @@ void taskReflex(void * params){
             digitalWrite(indexToLed[randomLed], HIGH);
 
             last = millis();
+
+            xQueueReset(inputQueue);
             while(millis()-last<(RESPONSE_TIME - 300 * currentDifficulty)){
                                 
                 if(xQueueReceive(inputQueue, &receivedButton, pdMS_TO_TICKS(10))== pdTRUE){
                     if((int) receivedButton == randomLed){
-                        
                         score++;
                         playSound(true,randomLed);
                         playerGuess = true;
@@ -68,7 +70,6 @@ void taskReflex(void * params){
                         digitalWrite(indexToLed[randomLed], LOW);
                         vTaskResume(menuTaskHandle);
                         vTaskSuspend(reflexTaskHandle);
-                        shouldRestart = true;
                         break;
                     }
                     else{

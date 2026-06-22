@@ -62,7 +62,7 @@ void taskSimonSays(void * params){
 
             vTaskDelay(pdMS_TO_TICKS(350));            
             while(i < score + 1 && !isMenuActive){
-                blinkAndBuzzer(sequence[i], SEQUENCE_DELAY - 50 * currentDifficulty);
+                blinkAndBuzzer(sequence[i], SEQUENCE_DELAY - 100 * currentDifficulty);
                 vTaskDelay(pdMS_TO_TICKS(250 - 50* currentDifficulty));
                 i++;
             }

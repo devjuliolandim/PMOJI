@@ -6,7 +6,5 @@
 
 extern bool isMenuActive;
 
-extern MenuOption currentMenuOption;
-
 void taskMenu(void * params);
 void pmojiOpening();
