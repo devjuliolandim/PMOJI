@@ -7,33 +7,7 @@
 #include "taskDifficulty.h"
 #include "taskInput.h"
 #include "globals.h"
-
-void gameBeginRoutineReflex(){
-    for(int i = 0; i < 1; i++){
-        for(int j = 0; j < 2;j++){
-            digitalWrite(RED_LED, HIGH);
-            digitalWrite(BLUE_LED, HIGH);
-            tone(BUZZER, ledToBuzzer[j]);
-            vTaskDelay(BEGINNING_DELAY);
-            digitalWrite(RED_LED, LOW);
-            digitalWrite(BLUE_LED, LOW);
-            vTaskDelay(BEGINNING_DELAY);
-        }
-
-        for(int j = 0; j < 2;j++){
-            digitalWrite(YELLOW_LED, HIGH);
-            digitalWrite(GREEN_LED, HIGH);
-            tone(BUZZER, ledToBuzzer[j]);
-            vTaskDelay(BEGINNING_DELAY);
-            digitalWrite(YELLOW_LED, LOW);
-            digitalWrite(GREEN_LED, LOW);
-            vTaskDelay(BEGINNING_DELAY);
-        }
-
-    }
-    noTone(BUZZER);
-
-}
+#include "output.h"
    
 void playSound(bool isCorrect, int randomLed){
     if(isCorrect){
@@ -68,7 +42,7 @@ void taskReflex(void * params){
     while(true){
     
         inputsEnabled = false;
-        gameBeginRoutineReflex();
+        gameBeginRoutine();
         inputsEnabled = true;
 
         int gameBegin = millis();
