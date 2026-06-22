@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <random> 
 #include "globals.h"
+#include "output.h"
 
 std::vector<String> words = {"Vermelho", "Amarelo", "Azul", "Verde"};
 std::vector<int> nums = {0,1,2,3};
@@ -31,9 +32,7 @@ void taskStroop(void * params){
 
     while(true){
         
-       // gameBeginRoutineReflex();
-       // change for stroop
-        xQueueReset(inputQueue);
+        gameBeginRoutine();
         int gameBegin = millis();
         shouldRestart = false;
         score = 0;
@@ -61,10 +60,8 @@ void taskStroop(void * params){
                     if((int) receivedButton == nums[1]){
                         
                         score++;
-                        //change for stroop
-                        //playSound(true,randomLed);
-                        digitalWrite(indexToLed[randomLed],LOW);
-                        vTaskDelay(pdMS_TO_TICKS(100));
+                        xQueueReset(inputQueue);
+                        handleCorrectInputSound(true, indexToLed[randomLed]);
                         playerGuess = true;
                         break;
                     }else if((ButtonEvent) receivedButton == BTN_WHITE){
@@ -75,10 +72,7 @@ void taskStroop(void * params){
                         break;
                     }
                     else{
-                        //change for stroop
-                        //playSound(false,randomLed);
-                        digitalWrite(indexToLed[randomLed],LOW);
-                        vTaskDelay(pdMS_TO_TICKS(100));
+                        handleCorrectInputSound(false, indexToLed[randomLed]);
                         break;
                     }
                     
@@ -91,11 +85,8 @@ void taskStroop(void * params){
             }
 
             //User didn't give the input in time
-            if(!playerGuess){
-                //change for stroop
-                //playSound(false,randomLed);
-                digitalWrite(indexToLed[randomLed],LOW);
-                vTaskDelay(pdMS_TO_TICKS(100));
+            if(millis()-last>=RESPONSE_TIME - 300 * currentDifficulty && !playerGuess){
+                handleCorrectInputSound(false,indexToLed[randomLed]);
             }
 
             playerGuess = false;

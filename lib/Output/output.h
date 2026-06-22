@@ -7,3 +7,4 @@
 void blinkAndBuzzer(int index, int delay);
 void gameBeginRoutine();
 void gameOverRoutine();
+void handleCorrectInputSound(bool isCorrect, int led);

@@ -50,6 +50,12 @@ void gameBeginRoutine(){
         break;
     
     case STROOP:
+        for(int i = 12; i > 0; i--){
+
+            int index = i % 4;
+
+            blinkAndBuzzer(index, GAME_BEGIN_DELAY);
+        }
         break;
 
     case REFLEX:
@@ -78,5 +84,23 @@ void gameBeginRoutine(){
         noTone(BUZZER);
 
         break;
+    }
+}
+
+void handleCorrectInputSound(bool isCorrect, int led){
+    if(isCorrect){
+        digitalWrite(led, LOW);
+        tone(BUZZER, 1319);
+        vTaskDelay(pdMS_TO_TICKS(100));
+        tone(BUZZER, 1568);
+        vTaskDelay(pdMS_TO_TICKS(100));
+        noTone(BUZZER);
+    }else{
+        digitalWrite(led, LOW);
+        tone(BUZZER, 400);
+        vTaskDelay(pdMS_TO_TICKS(100));
+        tone(BUZZER, 250);
+        vTaskDelay(pdMS_TO_TICKS(100));
+        noTone(BUZZER);
     }
 }

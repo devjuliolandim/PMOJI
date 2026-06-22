@@ -9,25 +9,6 @@
 #include "globals.h"
 #include "output.h"
    
-void playSound(bool isCorrect, int randomLed){
-    if(isCorrect){
-        digitalWrite(indexToLed[randomLed], LOW);
-        tone(BUZZER, 1319);
-        vTaskDelay(pdMS_TO_TICKS(100));
-        tone(BUZZER, 1568);
-        vTaskDelay(pdMS_TO_TICKS(100));
-        noTone(BUZZER);
-    }else{
-        digitalWrite(indexToLed[randomLed], LOW);
-        tone(BUZZER, 400);
-        vTaskDelay(pdMS_TO_TICKS(100));
-        tone(BUZZER, 250);
-        vTaskDelay(pdMS_TO_TICKS(100));
-        noTone(BUZZER);
-    }
-}
-
-
 void taskReflex(void * params){
 
     ButtonEvent receivedButton;
@@ -63,7 +44,7 @@ void taskReflex(void * params){
                 if(xQueueReceive(inputQueue, &receivedButton, pdMS_TO_TICKS(10))== pdTRUE){
                     if((int) receivedButton == randomLed){
                         score++;
-                        playSound(true,randomLed);
+                        handleCorrectInputSound(true,indexToLed[randomLed]);
                         playerGuess = true;
                         break;
                     }else if((ButtonEvent) receivedButton == BTN_WHITE){
@@ -73,7 +54,7 @@ void taskReflex(void * params){
                         break;
                     }
                     else{
-                        playSound(false,randomLed);
+                        handleCorrectInputSound(false,indexToLed[randomLed]);
                         break;
                     }
                 }                
@@ -85,8 +66,8 @@ void taskReflex(void * params){
             }
 
             //User didn't give the input in time
-            if(!playerGuess){
-                playSound(false,randomLed);
+            if(millis()-last>=RESPONSE_TIME - 300 * currentDifficulty && !playerGuess){
+                handleCorrectInputSound(false,indexToLed[randomLed]);
             }
 
             playerGuess = false;
