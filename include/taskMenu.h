@@ -7,4 +7,3 @@
 extern bool isMenuActive;
 
 void taskMenu(void * params);
-void pmojiOpening();

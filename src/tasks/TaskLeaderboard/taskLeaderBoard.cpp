@@ -15,10 +15,11 @@ void taskLeaderBoard(void * params){
     
     ButtonEvent receivedButton;
     bool shouldPrint = true;
+
+    int brightness = 0;
+    int step = 5;
     
     while(true){
-
-        digitalWrite(GREEN_LED, HIGH);
 
         if(shouldPrint){
             Serial.println("RECORDES: ");  
@@ -36,13 +37,21 @@ void taskLeaderBoard(void * params){
             shouldPrint = false;
         }
 
-        if(xQueueReceive(inputQueue, &receivedButton, portMAX_DELAY)== pdTRUE && receivedButton == BTN_WHITE){
+        if(xQueueReceive(inputQueue, &receivedButton, pdMS_TO_TICKS(20))== pdTRUE && receivedButton == BTN_WHITE){
             vTaskResume(menuTaskHandle);
-            digitalWrite(GREEN_LED, LOW);
+            analogWrite(GREEN_LED, 0);
             vTaskSuspend(leaderboardTaskHandle);
             shouldPrint = true;
+            brightness = 0;
+            step = 5;
         }
 
+        brightness += step;
+        
+        if(brightness>=255 || brightness<=0){
+            step = -step;
+        }
+        analogWrite(GREEN_LED, brightness);
 
     }
 }
