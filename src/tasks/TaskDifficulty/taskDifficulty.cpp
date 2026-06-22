@@ -39,8 +39,8 @@ void taskDifficulty(void * params){
                     break;
                 }
 
-                currentGameState = (GameState)currentMenuOption;
-                vTaskResume(menuOptionToTask[currentMenuOption]);
+                currentGameState = chosenMenuOption;
+                vTaskResume(menuOptionToTask[chosenMenuOption]);
                 vTaskSuspend(difficultyTaskHandle);
             }else if(receivedButton == BTN_WHITE){
                 for(int i = 0; i < 4; i++){
@@ -55,7 +55,7 @@ void taskDifficulty(void * params){
 
         brightness += step;
 
-        analogWrite(menuOptionToLed[currentMenuOption],brightness);
+        analogWrite(menuOptionToLed[chosenMenuOption],brightness);
         if(brightness >= 255 || brightness <=0){
             step = -step;
         }

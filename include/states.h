@@ -19,13 +19,6 @@ enum GameState{
     DIFFICULTY
 };
 
-enum MenuOption {
-    SIMONSAYS_OPT,
-    STROOP_OPT,
-    REFLEX_OPT,
-    LEADERBOARD_OPT
-};
-
 enum Difficulty {
     EASY,
     MEDIUM,
@@ -33,4 +26,4 @@ enum Difficulty {
 };
 
 extern GameState currentGameState;
-extern MenuOption currentMenuOption;
+extern GameState chosenMenuOption;

@@ -1,0 +1,5 @@
+Algumas informações importantes:
+    -Primeiramente os scores estão salvos como uma variável global "score" em Globals
+    -Importante citar que existem duas variáveis globais que cuidam do estado
+        -- chosenMenuOption -> qual opção foi escolhida no menu principal
+        -- currentGameState -> Qual tela eu estou

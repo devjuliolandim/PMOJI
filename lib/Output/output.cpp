@@ -38,7 +38,7 @@ void gameOverRoutine(){
 }
 
 void gameBeginRoutine(){
-    switch (currentMenuOption)
+    switch (chosenMenuOption)
     {
     case SIMONSAYS:
         for(int i = 0; i < 12; i++){
