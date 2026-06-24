@@ -14,13 +14,11 @@ GameState chosenMenuOption = SIMONSAYS;
 void taskMenu(void *params){
     ButtonEvent receivedButton;
     
-
     digitalWrite(RED_LED, LOW);
     digitalWrite(YELLOW_LED, LOW);
     digitalWrite(BLUE_LED, LOW);
     digitalWrite(GREEN_LED, LOW);
 
-    //Suspend games tasks before choosing one
     vTaskSuspend(simonTaskHandle);
     vTaskSuspend(leaderboardTaskHandle);
     vTaskSuspend(reflexTaskHandle);
@@ -32,7 +30,7 @@ void taskMenu(void *params){
     int step = 5;
     
     while(true){
-        if(xQueueReceive(inputQueue, &receivedButton, pdMS_TO_TICKS(20))== pdTRUE){
+        if(xQueueReceive(inputQueue, &receivedButton, pdMS_TO_TICKS(20)) == pdTRUE){
             
             if(receivedButton != BTN_WHITE){
 
@@ -57,6 +55,7 @@ void taskMenu(void *params){
                         chosenMenuOption = LEADERBOARD;
                     break;
                 }
+
                 if(receivedButton != BTN_GREEN){
                     currentGameState = DIFFICULTY;
                     vTaskResume(difficultyTaskHandle);
@@ -69,13 +68,13 @@ void taskMenu(void *params){
                     currentGameState = LEADERBOARD;
                     vTaskResume(leaderboardTaskHandle);
                 }
+                
                 vTaskSuspend(menuTaskHandle);
-                currentGameState = MENU;
+                
                 brightness = 0;
                 step = 5;
             } 
         }
-
 
         brightness += step;
 
@@ -88,6 +87,4 @@ void taskMenu(void *params){
         analogWrite(BLUE_LED, brightness);
         analogWrite(GREEN_LED, brightness);
     }
-
-    
 }

@@ -51,6 +51,10 @@ void taskInput(void *params){
             }
         }
 
+        if(event != BTN_NONE){
+            printButton(event);
+        }
+
         if(event == BTN_WHITE){
             Serial.println("BOTÃO BRANCO APERTADO!!!!!!");
         }

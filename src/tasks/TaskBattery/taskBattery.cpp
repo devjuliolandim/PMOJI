@@ -2,6 +2,8 @@
 #include "taskBattery.h"
 #include "config.h"
 
+float batteryLevel = 0.0f;
+
 void taskBattery(void *params)
 {
     batteryLevel = 0;

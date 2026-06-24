@@ -19,4 +19,14 @@
 #define BUZZER         25
 
 //Battery
-#define BATTERY_PIN  789
+#define BATTERY_PIN  34
+
+// Display
+#define TFT_SCLK       18  
+#define TFT_MOSI       23  
+#define TFT_MISO       19  
+#define TFT_CS         22  
+#define TFT_DC         21  
+#define TFT_RST        32
+#define TFT_BACKLIGHT  33
+

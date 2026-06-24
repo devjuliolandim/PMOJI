@@ -25,15 +25,9 @@ void taskSimonSays(void * params){
         while(score < SEQUENCE_SIZE && !isMenuActive){
             
             if(isGameOver){
-
                 int highScore = getScore("simon");
 
                 if(score > highScore){
-
-                    Serial.print("NOVO HIGHSCORE: ");
-                    Serial.println(score);
-                    Serial.print("ANTIGO HIGHSCORE: ");
-                    Serial.println(getScore("simon"));
                     highScore = score;
                     saveScore("simon",highScore);
                 }
@@ -41,8 +35,8 @@ void taskSimonSays(void * params){
                 score = 0;
                 isGameOver = false;
                 gameOverRoutine();
+                vTaskDelay(pdMS_TO_TICKS(750));
             }
-
 
             if(isBegining){
                 isBegining = false;
@@ -53,12 +47,7 @@ void taskSimonSays(void * params){
 
             int i = 0;
 
-
-            //Global Variable that blocks the queue from receive inputs
-            //The WHITE BUTTON is the only exception
             inputsEnabled = false;
-
-
 
             vTaskDelay(pdMS_TO_TICKS(350));            
             while(i < score + 1 && !isMenuActive){
@@ -67,7 +56,6 @@ void taskSimonSays(void * params){
                 i++;
             }
 
-            
             i = 0;
 
             xQueueReset(inputQueue);
@@ -76,11 +64,6 @@ void taskSimonSays(void * params){
             while(i < score + 1 && !isMenuActive){
 
                 if(xQueueReceive(inputQueue, &receivedButton, portMAX_DELAY)== pdTRUE){
-
-                    Serial.print("Led sorteado : ");
-                    Serial.println(sequence[i]);
-                    Serial.print("Botão apertado : ");
-                    Serial.println(receivedButton);
                     
                   if((int)receivedButton == sequence[i]){
                     blinkAndBuzzer((int)receivedButton, INPUT_DELAY);
@@ -100,13 +83,13 @@ void taskSimonSays(void * params){
                 score = 0;
                 isBegining = true;
                 isGameOver = false;
+                isMenuActive = false; 
+                currentGameState = MENU; 
                 vTaskResume(menuTaskHandle);
-                vTaskSuspend(simonTaskHandle);
-                isMenuActive = false;
+                vTaskSuspend(simonTaskHandle); 
             }else if (!isGameOver){
                 score++;
             }
         }
     }
-
 }

@@ -11,6 +11,7 @@
 #include <random> 
 #include "globals.h"
 #include "output.h"
+#include "displayPrivate.h"
 
 std::vector<String> words = {"Vermelho", "Amarelo", "Azul", "Verde"};
 std::vector<int> nums = {0,1,2,3};
@@ -44,6 +45,11 @@ void taskStroop(void * params){
             //Escolhe o primeiro de index (Cor Sorteada)
             int randomLed = nums[0];
 
+            // ESPELHAMENTO PARA O DISPLAY: Envia os dados para as variáveis globais da tela
+            static const uint16_t coresRGB[] = {CLR_RED, CLR_YELLOW, CLR_BLUE, CLR_GREEN};
+            ::randomLed = coresRGB[randomLed]; 
+            stroopWord = words[nums[1]].c_str(); 
+
             Serial.print("Palavra Sorteada:");
             Serial.println(words[nums[1]]);
             Serial.print("Cor Sorteada: ");
@@ -66,6 +72,10 @@ void taskStroop(void * params){
                         break;
                     }else if((ButtonEvent) receivedButton == BTN_WHITE){
                         digitalWrite(indexToLed[randomLed], LOW);
+                        
+                        score = 0;
+                        currentGameState = MENU;
+                        
                         vTaskResume(menuTaskHandle);
                         vTaskSuspend(stroopTaskHandle);
                         shouldRestart = true;
@@ -108,6 +118,8 @@ void taskStroop(void * params){
                 Serial.println(" pts");
             }
 
+            // Atraso para a tela de Game Over segurar o frame no ST7789 antes de reiniciar
+            vTaskDelay(pdMS_TO_TICKS(4000));
         }
     }
 }

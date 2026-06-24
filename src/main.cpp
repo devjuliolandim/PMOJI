@@ -12,6 +12,7 @@
 #include "taskReflex.h"
 #include "taskStroop.h"
 #include "taskDifficulty.h"
+#include "taskDisplay.h"
 
 QueueHandle_t inputQueue;
 TaskHandle_t menuTaskHandle = NULL;
@@ -20,6 +21,7 @@ TaskHandle_t stroopTaskHandle = NULL;
 TaskHandle_t reflexTaskHandle = NULL;
 TaskHandle_t leaderboardTaskHandle = NULL;
 TaskHandle_t difficultyTaskHandle = NULL;
+TaskHandle_t displayTaskHandle = NULL;
 
 TaskHandle_t menuOptionToTask[4];
 
@@ -106,6 +108,16 @@ void setup() {
         1,
         &menuTaskHandle,
         0
+    );
+
+    xTaskCreatePinnedToCore(
+        taskDisplay,
+        "Task Display",
+        4096,          // Alocação segura para pilhas gráficas da Adafruit
+        NULL,
+        1,             // Prioridade balanceada com as demais tasks de interface
+        &displayTaskHandle,
+        1              // Executa no Core 1 (deixando o Core 0 livre para inputs e cálculos de bateria)
     );
 
     menuOptionToTask[0] = simonTaskHandle;

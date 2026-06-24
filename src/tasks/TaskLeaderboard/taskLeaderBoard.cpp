@@ -6,10 +6,12 @@
 #include "taskLeaderBoard.h"
 #include "taskDifficulty.h"
 #include "config.h"
+#include "globals.h"
 
 const char* difficulties[3] = {"EASY","MEDIUM","HARD"};
 const char* gameNames[3] = {"Simon Says", "Reflexo", "Stroop"};
 const char* gameIds[3] = {"simon","reflex","stroop"};
+
 
 void taskLeaderBoard(void * params){
     
@@ -37,13 +39,21 @@ void taskLeaderBoard(void * params){
             shouldPrint = false;
         }
 
-        if(xQueueReceive(inputQueue, &receivedButton, pdMS_TO_TICKS(20))== pdTRUE && receivedButton == BTN_WHITE){
-            vTaskResume(menuTaskHandle);
-            analogWrite(GREEN_LED, 0);
-            vTaskSuspend(leaderboardTaskHandle);
-            shouldPrint = true;
-            brightness = 0;
-            step = 5;
+        if(xQueueReceive(inputQueue, &receivedButton, pdMS_TO_TICKS(20)) == pdTRUE){
+            // Trata o botão Branco: Retorna ao Menu
+            if(receivedButton == BTN_WHITE){
+                currentGameState = MENU; // Altera o estado para que o display atualize a tela
+                vTaskResume(menuTaskHandle);
+                analogWrite(GREEN_LED, 0);
+                vTaskSuspend(leaderboardTaskHandle);
+                shouldPrint = true;
+                brightness = 0;
+                step = 5;
+            }
+            // Trata o botão Verde: Alterna a dificuldade exibida na tela (0 -> 1 -> 2 -> 0)
+            else if(receivedButton == BTN_GREEN){
+                screenDifficulty = (Difficulty)((screenDifficulty + 1) % 3);
+            }
         }
 
         brightness += step;

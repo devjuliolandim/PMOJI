@@ -49,6 +49,9 @@ void taskReflex(void * params){
                         break;
                     }else if((ButtonEvent) receivedButton == BTN_WHITE){
                         digitalWrite(indexToLed[randomLed], LOW);
+                        score = 0;
+                        currentGameState = MENU;
+                        shouldRestart = true;
                         vTaskResume(menuTaskHandle);
                         vTaskSuspend(reflexTaskHandle);
                         break;
@@ -60,12 +63,10 @@ void taskReflex(void * params){
                 }                
             }
 
-            //Just in case of Suspend Task and then come back
             if(shouldRestart){
                 break;
             }
 
-            //User didn't give the input in time
             if(millis()-last>=RESPONSE_TIME - 300 * currentDifficulty && !playerGuess){
                 handleCorrectInputSound(false,indexToLed[randomLed]);
             }
@@ -74,10 +75,6 @@ void taskReflex(void * params){
         }
 
         if(!shouldRestart){
-            //GAME OVER ROUTINE
-            //MUSIC PLAYS WHILE SHOWING THE SCORE
-            //ASK IF THE SCORE IS GREATER THAN HIGHSCORE
-            
             if(score > getScore("reflex")){
                 saveScore("reflex",score);
                 Serial.println("PARABÉNS VOCÊ BATEU O NOVO RECORDE!!!!");
@@ -88,7 +85,6 @@ void taskReflex(void * params){
                 Serial.print(score);
                 Serial.println(" pts");
             }
-
         }
     }
 }
